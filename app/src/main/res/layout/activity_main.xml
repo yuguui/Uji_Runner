@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="es.uji.al341520.breakthewall.MainActivity">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/Test_Framework"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="testFramework"
+            android:text="Test Framework" />
+
+        <Button
+            android:id="@+id/Test_Parallax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="testParallax"
+            android:text="Test Parallax" />
+
+        <Button
+            android:id="@+id/test_Character"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="testCharacter"
+            android:text="Test Character" />
+
+        <Button
+            android:id="@+id/test_Brick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="testBricks"
+            android:text="Test Bricks" />
+
+        <Button
+            android:id="@+id/test_levels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="testLevels"
+            android:text="Test Levels" />
+
+        <Button
+            android:id="@+id/test_lives"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="testLives"
+            android:text="Test Lives" />
+
+        <Button
+            android:id="@+id/play_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="playGame"
+            android:text="Play Game" />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
