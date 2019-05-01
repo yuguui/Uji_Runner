@@ -1,6 +1,8 @@
 package es.uji.al341520.breakthewall.model;
 
 import android.graphics.Rect;
+import android.os.Debug;
+import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -53,7 +55,8 @@ public class Animation {
         AtomicInteger count = new AtomicInteger();
         while (sourceRect.left >= maxWidth) {
             count.getAndIncrement();
-            sourceRect.left -= maxWidth;
+            sourceRect.left -= (maxWidth);
+
         }
         sourceRect.top = count.get() * frameHeight;
         sourceRect.right = sourceRect.left + frameWidth - 1;

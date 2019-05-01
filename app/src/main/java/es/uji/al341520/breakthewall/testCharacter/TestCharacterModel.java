@@ -111,9 +111,9 @@ public class TestCharacterModel {
         runnerWidths[RunnerState.JUMPING.ordinal()] = Assets.runnerJumpsWidth;
         runnerHeights[RunnerState.JUMPING.ordinal()] = Assets.runnerJumpsHeight;
 
-        running = new Animation(0, CHARACTER_RUN_NUMBER_OF_FRAMES,runnerWidths[0],runnerHeights[0],runnerWidths[0]*(CHARACTER_RUN_NUMBER_OF_FRAMES),30);
-        crouching = new Animation(0, CHARACTER_CROUCH_NUMBER_OF_FRAMES,runnerWidths[1],runnerHeights[1],runnerWidths[1]*CHARACTER_CROUCH_NUMBER_OF_FRAMES ,30);
-        jumping = new Animation(0, CHARACTER_JUMP_NUMBER_OF_FRAMES,runnerWidths[2],runnerHeights[2],runnerWidths[2]*CHARACTER_JUMP_NUMBER_OF_FRAMES ,30);
+        running = new Animation(1, CHARACTER_RUN_NUMBER_OF_FRAMES,runnerWidths[0],runnerHeights[0],runnerWidths[0]*(CHARACTER_RUN_NUMBER_OF_FRAMES),30);
+        crouching = new Animation(1, CHARACTER_CROUCH_NUMBER_OF_FRAMES,runnerWidths[1],runnerHeights[1],runnerWidths[1]*CHARACTER_CROUCH_NUMBER_OF_FRAMES ,30);
+        jumping = new Animation(1, CHARACTER_JUMP_NUMBER_OF_FRAMES,runnerWidths[2],runnerHeights[2],runnerWidths[2]*CHARACTER_JUMP_NUMBER_OF_FRAMES ,30);
 
         runner.addAnimation(running);
         runner.addAnimation(crouching);
@@ -141,14 +141,15 @@ public class TestCharacterModel {
 
     private void updateParallaxBg() {
         for (int i = 0; i < PARALLAX_LAYERS; i++) {
-            bgParallax[i].move(UNIT_TIME);
-            if(bgParallax[i].getX() < -STAGE_WIDTH){
-                bgParallax[i].setX(STAGE_WIDTH);
-            }
             shiftedBgParallax[i].move(UNIT_TIME);
             if(shiftedBgParallax[i].getX() < -STAGE_WIDTH){
                 shiftedBgParallax[i].setX(STAGE_WIDTH);
             }
+            bgParallax[i].move(UNIT_TIME);
+            if(bgParallax[i].getX() < -STAGE_WIDTH){
+                bgParallax[i].setX(STAGE_WIDTH);
+            }
+
         }
     }
     private void updateRunner(){

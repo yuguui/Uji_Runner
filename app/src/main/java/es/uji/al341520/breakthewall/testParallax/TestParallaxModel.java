@@ -82,14 +82,15 @@ public class TestParallaxModel {
 
     private void updateParallaxBg() {
         for (int i = 0; i < PARALLAX_LAYERS; i++) {
-            bgParallax[i].move(UNIT_TIME);
-            if(bgParallax[i].getX() < -STAGE_WIDTH){
-                bgParallax[i].setX(STAGE_WIDTH);
-            }
             shiftedBgParallax[i].move(UNIT_TIME);
             if(shiftedBgParallax[i].getX() < -STAGE_WIDTH){
                 shiftedBgParallax[i].setX(STAGE_WIDTH);
             }
+            bgParallax[i].move(UNIT_TIME);
+            if(bgParallax[i].getX() < -STAGE_WIDTH){
+                bgParallax[i].setX(STAGE_WIDTH);
+            }
+
         }
     }
 
