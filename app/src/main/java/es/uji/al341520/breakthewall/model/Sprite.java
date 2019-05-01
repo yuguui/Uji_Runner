@@ -129,5 +129,32 @@ public class Sprite {
         return animated;
     }
 
+
+    public boolean overlapBoundingBox (Sprite collider){
+
+        float xCollider = collider.getX(), yCollider = collider.getY(), colliderSizeX = collider.sizeX, colliderSizeY = collider.sizeY;
+
+        if ( x <= xCollider &&  x + sizeX >= xCollider) {
+            if (yCollider + colliderSizeY >= y && yCollider < y) {
+                return true;
+            }
+            if (yCollider <= y + sizeY && yCollider > y + sizeY) {
+                return true;
+            }
+            return true;
+
+        }
+        if ( y <= yCollider && y + sizeY >= yCollider ) {
+            if (xCollider + colliderSizeX >= x && xCollider < x) {
+                return true;
+            }
+            if (xCollider <= x + sizeX && xCollider > x + sizeX) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }
 

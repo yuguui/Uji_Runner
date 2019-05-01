@@ -20,6 +20,7 @@
         <activity android:name=".testFramework.TestFramework"/>
         <activity android:name=".testParallax.TestParallax"/>
         <activity android:name=".testCharacter.TestCharacter"/>
+        <activity android:name=".testObstacles.TestObstacles"/>
 
 
     </application>

@@ -26,6 +26,10 @@ public class Assets {
     public static int runnerCrouchesWidth;
     public static int runnerCrouchesHeight;
 
+    public static Bitmap groundObstacle1, groundObstacle2,groundObstacle3,groundObstacle4;
+    public static int heightForGroundObstacles, heightForFlyingObstacles;
+    public static int groundObstacle1Width, groundObstacle2Width,groundObstacle3Width,groundObstacle4Width;
+
 
     public static final int CHARACTER_RUN_FRAME_WIDTH = 120;
     public static final int CHARACTER_RUN_FRAME_HEIGHT = 150;
@@ -34,9 +38,21 @@ public class Assets {
     public static final int CHARACTER_CROUCH_FRAME_WIDTH = 70;
     public static final int CHARACTER_CROUCH_FRAME_HEIGHT = 105;
 
+    private static final int FACE_FRAME_HEIGHT = 120;
+    private static final int FACE_FRAME_WIDTH = 120;
+
+    private static final int CHICKEN_FRAME_HEIGHT = 100;
+    private static final int CHICKEN_FRAME_WIDTH = 100;
+
     public static final int CHARACTER_RUN_NUMBER_OF_FRAMES  = 4;
     public static final int CHARACTER_JUMP_NUMBER_OF_FRAMES  = 6;
     public static final int CHARACTER_CROUCH_NUMBER_OF_FRAMES  = 5;
+
+    public static final float HEIGHT_RATIO_GROUND_OBSTACLE = 0.6f;
+    public static final float HEIGHT_RATIO_FLYING_OBSTACLE = 0.85f;
+    public static final float HEIGHT_RATIO_EXPLOSION = 0.85f;
+
+
 
 
 
@@ -64,6 +80,7 @@ public class Assets {
                 R.drawable.parallax3,
                 R.drawable.parallax4
         };
+
         bgLayers = new Bitmap[bgLayersResources.length];
         for (int i = 0; i < bgLayers.length; i++) {
             bgLayers[i] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
@@ -92,6 +109,36 @@ public class Assets {
         characterCrouching = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
                 resources, R.drawable.boton), runnerCrouchesWidth *
                 CHARACTER_CROUCH_NUMBER_OF_FRAMES, runnerCrouchesHeight , true);
+
+
+        heightForGroundObstacles = (int) (playerHeight * HEIGHT_RATIO_GROUND_OBSTACLE);
+        groundObstacle1Width = (heightForGroundObstacles * FACE_FRAME_WIDTH) /
+                FACE_FRAME_HEIGHT;
+        groundObstacle1 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
+                R.drawable.paddle), groundObstacle1Width, heightForGroundObstacles, true);
+
+        groundObstacle2Width = (heightForGroundObstacles * CHICKEN_FRAME_WIDTH) /
+                CHICKEN_FRAME_HEIGHT;
+        groundObstacle2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                resources, R.drawable.boton), groundObstacle2Width,
+                heightForGroundObstacles, true);
+
+        groundObstacle3Width = (heightForGroundObstacles * FACE_FRAME_WIDTH) /
+                FACE_FRAME_HEIGHT;
+        groundObstacle3 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
+                R.drawable.brick0), groundObstacle3Width, heightForGroundObstacles, true);
+
+        groundObstacle4Width = (heightForGroundObstacles * CHICKEN_FRAME_WIDTH) /
+                CHICKEN_FRAME_HEIGHT;
+        groundObstacle4 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                resources, R.drawable.brick3), groundObstacle4Width,
+                heightForGroundObstacles, true);
+
+
+
+
+
+
     }
 
 }

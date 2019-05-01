@@ -30,39 +30,32 @@
             android:text="Test Parallax" />
 
         <Button
-            android:id="@+id/test_Character"
+            android:id="@+id/Test_Character"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="testCharacter"
             android:text="Test Character" />
 
         <Button
-            android:id="@+id/test_Brick"
+            android:id="@+id/Test_Obstacles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="testBricks"
-            android:text="Test Bricks" />
+            android:onClick="testObstacles"
+            android:text="Test Obstacles" />
 
         <Button
-            android:id="@+id/test_levels"
+            android:id="@+id/test_levelsHUD"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="testLevels"
-            android:text="Test Levels" />
+            android:onClick="testLevelsHud"
+            android:text="Test Levels HUD" />
 
         <Button
-            android:id="@+id/test_lives"
+            android:id="@+id/Uji_Runnere"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="testLives"
-            android:text="Test Lives" />
-
-        <Button
-            android:id="@+id/play_game"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="playGame"
-            android:text="Play Game" />
+            android:onClick="ujiRunner"
+            android:text="Uji Runner" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
