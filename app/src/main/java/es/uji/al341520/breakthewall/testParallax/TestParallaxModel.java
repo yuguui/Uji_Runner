@@ -62,7 +62,7 @@ public class TestParallaxModel {
         bgParallax = new Sprite[PARALLAX_LAYERS];
         shiftedBgParallax = new Sprite[PARALLAX_LAYERS];
         for (int i = 0; i < PARALLAX_LAYERS; i++) {
-            int speed = (i+1)*2;
+            int speed = (i+1)*5;
             bgParallax[i] = new Sprite(Assets.bgLayers[i], false, 0f, 0f, -speed,
                     0, STAGE_WIDTH , STAGE_HEIGHT);
             shiftedBgParallax[i] = new Sprite(Assets.bgLayers[i], false, STAGE_WIDTH,

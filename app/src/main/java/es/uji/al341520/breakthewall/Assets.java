@@ -34,7 +34,7 @@ public class Assets {
     public static final int CHARACTER_CROUCH_FRAME_WIDTH = 70;
     public static final int CHARACTER_CROUCH_FRAME_HEIGHT = 105;
 
-    public static final int CHARACTER_RUN_NUMBER_OF_FRAMES  = 8;
+    public static final int CHARACTER_RUN_NUMBER_OF_FRAMES  = 4;
     public static final int CHARACTER_JUMP_NUMBER_OF_FRAMES  = 6;
     public static final int CHARACTER_CROUCH_NUMBER_OF_FRAMES  = 5;
 
@@ -58,11 +58,11 @@ public class Assets {
 
 
         int[] bgLayersResources = {
-                R.drawable.brick0,
-                R.drawable.brick1,                                                                                  //ACUERDATE DE CAMBIAR ESTOS BRICKS POR EL FONDO PUTO MONO
-                R.drawable.brick2,
-                R.drawable.brick3,
-                R.drawable.brick4
+                R.drawable.parallax0,
+                R.drawable.parallax1,                                                                                  //ACUERDATE DE CAMBIAR ESTOS BRICKS POR EL FONDO PUTO MONO
+                R.drawable.parallax2,
+                R.drawable.parallax3,
+                R.drawable.parallax4
         };
         bgLayers = new Bitmap[bgLayersResources.length];
         for (int i = 0; i < bgLayers.length; i++) {
@@ -72,8 +72,8 @@ public class Assets {
 
         playerHeight = (CHARACTER_RUN_FRAME_HEIGHT * playerWidth) / CHARACTER_RUN_FRAME_WIDTH;
         characterRunning = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                resources, R.drawable.paddle), playerWidth
-                , playerHeight*CHARACTER_RUN_NUMBER_OF_FRAMES, true);
+                resources, R.drawable.spritesheetcorrer), playerWidth*CHARACTER_RUN_NUMBER_OF_FRAMES
+                , playerHeight, true);
 
         runnerJumpsWidth = (playerWidth * CHARACTER_JUMP_FRAME_WIDTH) /
                 CHARACTER_RUN_FRAME_WIDTH;
@@ -81,8 +81,8 @@ public class Assets {
                 CHARACTER_JUMP_FRAME_WIDTH;
 
         characterJumping = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                resources, R.drawable.ball), runnerJumpsWidth , runnerJumpsHeight *
-                CHARACTER_JUMP_NUMBER_OF_FRAMES, true);
+                resources, R.drawable.ball), runnerJumpsWidth*
+                CHARACTER_JUMP_NUMBER_OF_FRAMES, runnerJumpsHeight , true);
 
         runnerCrouchesWidth = (playerWidth * CHARACTER_CROUCH_FRAME_WIDTH) /
                 CHARACTER_RUN_FRAME_WIDTH;
@@ -90,8 +90,8 @@ public class Assets {
                 / CHARACTER_CROUCH_FRAME_WIDTH;
 
         characterCrouching = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                resources, R.drawable.boton), runnerCrouchesWidth , runnerCrouchesHeight *
-                CHARACTER_CROUCH_NUMBER_OF_FRAMES, true);
+                resources, R.drawable.boton), runnerCrouchesWidth *
+                CHARACTER_CROUCH_NUMBER_OF_FRAMES, runnerCrouchesHeight , true);
     }
 
 }

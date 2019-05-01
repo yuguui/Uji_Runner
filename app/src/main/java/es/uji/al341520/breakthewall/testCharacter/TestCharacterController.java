@@ -87,7 +87,8 @@ public class TestCharacterController implements IGameController{
 
         Log.e("ANIMACIONES","El sprite es el de corriendo: "+ (runner.getBitmapToRender() == Assets.characterRunning));
         Log.e("ANIMACIONES","Las esquinas arriba y abajo son: "+ runner.getFrame().top +", "+ runner.getFrame().bottom+ " las esquinas laterales son: " + runner.getFrame().right +", " + runner.getFrame().left);
-        Rect rect1 = new Rect(runner.getFrame().top,runner.getFrame().right,runner.getFrame().bottom,runner.getFrame().left);
+
+        Rect rect1 = new Rect(0,runner.getFrame().top,71,runner.getFrame().bottom);
 
         graphics.drawAnimatedBitmap(runner.getBitmapToRender(),runner.getFrame(),rect,false);
         //(model.getRunner().getBitmapToRender(),model.getRunner().getX(), model.getRunner().getY(),false);
