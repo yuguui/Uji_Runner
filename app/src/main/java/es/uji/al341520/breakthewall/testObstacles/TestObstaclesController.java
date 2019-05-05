@@ -89,13 +89,28 @@ public class TestObstaclesController implements IGameController{
 
             }
         for (int i = 0; i < model.getGroundObstacles().size();i++){
-            graphics.drawBitmap(model.getGroundObstacles().get(i).getBitmapToRender(),model.getGroundObstacles().get(i).getX(),model.getGroundObstacles().get(i).getY(),false);
+            Sprite obstacle = model.getGroundObstacles().get(i);
+            if(obstacle.isAnimated()){
+                RectF rectObstacle = new RectF(obstacle.getX(),obstacle.getY(),obstacle.getX()+obstacle.getSizeX(),obstacle.getY()+obstacle.getSizeY());
+                graphics.drawAnimatedBitmap(obstacle.getBitmapToRender(),obstacle.getFrame(),rectObstacle,false);
+            }
+            else {
+                graphics.drawBitmap(model.getGroundObstacles().get(i).getBitmapToRender(),model.getGroundObstacles().get(i).getX(),model.getGroundObstacles().get(i).getY(),false);
+            }
+
 
         }
 
         for (int i = 0; i < model.getFlyingObstacles().size();i++){
-            graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(),model.getFlyingObstacles().get(i).getX(),model.getFlyingObstacles().get(i).getY(),false);
-
+            Sprite obstacle = model.getFlyingObstacles().get(i);
+            if(obstacle.isAnimated()){
+                Log.wtf("ANIMATION", "ESTE SPRITE TIENE ANIMACION");
+                RectF rectObstacle = new RectF(obstacle.getX(),obstacle.getY(),obstacle.getX()+obstacle.getSizeX(),obstacle.getY()+obstacle.getSizeY());
+                graphics.drawAnimatedBitmap(obstacle.getBitmapToRender(),obstacle.getFrame(),rectObstacle,false);
+            }
+            else {
+                graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(), model.getFlyingObstacles().get(i).getX(), model.getFlyingObstacles().get(i).getY(), false);
+            }
         }
         graphics.drawAnimatedBitmap(runner.getBitmapToRender(),runner.getFrame(),rect,false);
         return (graphics.getFrameBuffer());
