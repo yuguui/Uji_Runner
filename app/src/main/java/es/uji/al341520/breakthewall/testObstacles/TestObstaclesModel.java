@@ -1,14 +1,8 @@
 package es.uji.al341520.breakthewall.testObstacles;
 
-
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import es.uji.al341520.breakthewall.Assets;
 import es.uji.al341520.breakthewall.model.Animation;
@@ -17,6 +11,8 @@ import es.uji.al341520.breakthewall.model.Sprite;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_CROUCH_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_JUMP_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_RUN_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.characterRunning;
+import static es.uji.al341520.breakthewall.Assets.heightForFlyingObstacles;
 import static es.uji.al341520.breakthewall.Assets.playerHeight;
 
 public class TestObstaclesModel {
@@ -32,7 +28,8 @@ public class TestObstaclesModel {
     public static final int END_X =(STAGE_WIDTH * 5) / 8;
 
 
-    public static final int RUNNER_SPEED = 10;
+    public static final int RUNNER_SPEED = 100;
+    public static final int OBSTACLES_SPEED = 100;
 
     public static final int JUMP_OFFSET = 50;
 
@@ -90,15 +87,21 @@ public class TestObstaclesModel {
 
     private static final float FLYING1_SPAWN_CHANCE = 0.2f;
     private static final float FLYING2_SPAWN_CHANCE = 1f;
-    private static final float DELAY_OBSTACLE = 5.0f;
+
+
+    private static final float DELAY_OBSTACLE = 2.0f;
 
 
 
-    private static final float TIME_BETWEEN_GROUND_OBSTACLES = 5.0f;
+    private static final float TIME_BETWEEN_GROUND_OBSTACLES = 3f;
     private static final double PROB_ACTIVATION_GROUND_OBSTACLE = 0.5;
+
+    private static final float TIME_BETWEEN_FLYING_OBSTACLES = 3f;
+    private static final double PROB_ACTIVATION_FLYING_OBSTACLE = 0.5;
 
 
     private float timeSinceLastGroundObstacle;
+    private float timeSinceLastFlyingObstacle;
 
 
     private Sprite[] poolGroundObstacles;
@@ -115,15 +118,9 @@ public class TestObstaclesModel {
     private ArrayList<Sprite> groundObstacles;
     private ArrayList<Sprite> flyingObstacles;
 
-    public List<Sprite> getActiveSprites() {
-        return activeSprites;
-    }
-    public List<Sprite> getGroundObstacles() {
-        return groundObstacles;
-    }
-    public List<Sprite> getFlyingObstacles() {
-        return flyingObstacles;
-    }
+    public ArrayList<Sprite> getActiveSprites() { return activeSprites; }
+    public ArrayList<Sprite> getGroundObstacles() { return groundObstacles; }
+    public ArrayList<Sprite> getFlyingObstacles() { return flyingObstacles; }
 
 
 
@@ -203,6 +200,18 @@ public class TestObstaclesModel {
 
         }
 
+        for (int i = 0; i < POOL_OBSTACLES_SIZE; i++){
+            double random = Math.random();
+            if(random<=FLYING1_SPAWN_CHANCE){
+                poolFlyingObstacles[i]= new Sprite(Assets.flyingObstacle1,false,STAGE_WIDTH,topline-(2*Assets.heightForFlyingObstacles/3),0,0,Assets.flyingObstacle1Width,Assets.heightForFlyingObstacles);
+            }
+            else{
+                poolFlyingObstacles[i]= new Sprite(Assets.flyingObstacle2,false,STAGE_WIDTH,topline-(2*Assets.heightForFlyingObstacles/3),0,0,Assets.flyingObstacle2Width,Assets.heightForFlyingObstacles);
+            }
+
+
+        }
+
         poolGroundObstaclesIndex= 0;
         poolFlyingObstaclesIndex= 0;
 
@@ -214,7 +223,6 @@ public class TestObstaclesModel {
         tickTime += deltaTime;
         while (tickTime >= UNIT_TIME) {
             tickTime -= UNIT_TIME;
-            updateParallaxBg();
 
             if(runnerState == RunnerState.JUMPING){
                 if(jumping.hasRun()){
@@ -222,9 +230,12 @@ public class TestObstaclesModel {
                     UpdateValues();
                 }
             }
+
+            updateParallaxBg();
+            activateFlyingObstacle();
             activateGroundObstacle();
-            updateRunner();
             updateObstacles();
+            updateRunner();
         }
     }
 
@@ -249,8 +260,22 @@ public class TestObstaclesModel {
         runner.setFrame(runner.getAnimation(runnerState.ordinal()).getCurrentFrame(UNIT_TIME));
         for(int i = 0; i < groundObstacles.size(); i++){
             if(runner.overlapBoundingBox(groundObstacles.get(i))){
+
+                groundObstacles.get(i).setX(STAGE_WIDTH);
+                groundObstacles.get(i).setSpeedX(0);
                 groundObstacles.remove(i);
+
             }
+        }
+
+        for(int i = 0; i < flyingObstacles.size(); i++){
+            if(runner.overlapBoundingBox(flyingObstacles.get(i))){
+
+                flyingObstacles.get(i).setX(STAGE_WIDTH);
+                flyingObstacles.get(i).setSpeedX(0);
+                flyingObstacles.remove(i);
+            }
+
 
         }
         runner.move(UNIT_TIME);
@@ -258,14 +283,24 @@ public class TestObstaclesModel {
     }
 
     private void updateObstacles(){
-        Log.wtf("OBSTACULOS", "INDICE: " + groundObstacles.size());
         for (int i = 0; i < groundObstacles.size();i++){
             groundObstacles.get(i).move(UNIT_TIME);
-            Log.wtf("OBSTACULOS","POSICIONX: " + groundObstacles.get(i).getX());
+            if(groundObstacles.get(i).getX() < -groundObstacles.get(i).getSizeX()){
+                groundObstacles.get(i).setX(STAGE_WIDTH);
+                groundObstacles.get(i).setSpeedX(0);
+                groundObstacles.remove(i);
+            }
         }
         for (int i = 0; i < flyingObstacles.size();i++){
-            groundObstacles.get(i).move(UNIT_TIME);
+            flyingObstacles.get(i).move(UNIT_TIME);
+            Log.wtf("POOL", "La speed del objeto " + i +" es : " + flyingObstacles.get(i).getSpeedX());
+            if(flyingObstacles.get(i).getX() < -flyingObstacles.get(i).getSizeX()){
+                flyingObstacles.get(i).setX(STAGE_WIDTH);
+                flyingObstacles.get(i).setSpeedX(0);
+                flyingObstacles.remove(i);
+            }
         }
+
     }
 
 
@@ -325,10 +360,11 @@ public class TestObstaclesModel {
         runner.getAnimation(runnerState.ordinal()).resetAnimation();
         if(runnerState == RunnerState.RUNNING){
             runner.setBitmapToRender(Assets.characterRunning);
-            runner.setY(baseline-playerHeight);
+            runner.setY(baseline-characterRunning.getHeight());
         }
         else if (runnerState == RunnerState.CROUCHING){
             runner.setBitmapToRender(Assets.characterCrouching);
+            runner.setY(baseline-Assets.characterCrouching.getHeight());
         }
         else {
             runner.setBitmapToRender(Assets.characterJumping);
@@ -342,30 +378,75 @@ public class TestObstaclesModel {
     private void activateGroundObstacle() {
         double r;
         timeSinceLastGroundObstacle += UNIT_TIME;
-        Log.wtf("OBSTACULOS", "TIEMPO1: " + timeSinceLastGroundObstacle+ "TIEMPO2: "+TIME_BETWEEN_GROUND_OBSTACLES );
 
         if (timeSinceLastGroundObstacle >= TIME_BETWEEN_GROUND_OBSTACLES) {
             r = Math.random();
 
+            Log.wtf("RANDOM", "EL RANDOM DE GROUND HA SIDO : "+ r);
+
+
             if (r < PROB_ACTIVATION_GROUND_OBSTACLE) {
 
-                poolGroundObstacles[poolGroundObstaclesIndex].setSpeedX(-20);
-                if(poolGroundObstacles[poolGroundObstaclesIndex].isAnimated()){
+                poolGroundObstacles[poolGroundObstaclesIndex].setSpeedX(-OBSTACLES_SPEED);
+                if (poolGroundObstacles[poolGroundObstaclesIndex].isAnimated()) {
                     poolGroundObstacles[poolGroundObstaclesIndex].getAnimation().resetAnimation();
                 }
                 groundObstacles.add(poolGroundObstacles[poolGroundObstaclesIndex]);
-                Log.wtf("OBSTACULOS", "INDICE nuevo: " + groundObstacles.size());
+
+                if (poolGroundObstacles[poolGroundObstaclesIndex].isAnimated()) {
+                    poolGroundObstacles[poolGroundObstaclesIndex].getAnimation().resetAnimation();
+                }
 
                 poolGroundObstaclesIndex++;
-                if(poolGroundObstaclesIndex == POOL_OBSTACLES_SIZE){
+                if (poolGroundObstaclesIndex == POOL_OBSTACLES_SIZE) {
                     poolGroundObstaclesIndex = 0;
                 }
 
 
 
+                if (TIME_BETWEEN_FLYING_OBSTACLES - timeSinceLastFlyingObstacle - UNIT_TIME <= DELAY_OBSTACLE) {
+                    timeSinceLastFlyingObstacle = TIME_BETWEEN_FLYING_OBSTACLES - UNIT_TIME - DELAY_OBSTACLE;
+                }
             }
             timeSinceLastGroundObstacle -= TIME_BETWEEN_GROUND_OBSTACLES;
+
         }
+    }
+
+
+
+    private void activateFlyingObstacle(){
+        double r;
+        timeSinceLastFlyingObstacle += UNIT_TIME;
+
+        if (timeSinceLastFlyingObstacle >= TIME_BETWEEN_FLYING_OBSTACLES) {
+            r = Math.random();
+            Log.wtf("RANDOM", "EL RANDOM DE FLYING HA SIDO : "+ r);
+
+            if (r < PROB_ACTIVATION_FLYING_OBSTACLE) {
+
+                Log.wtf("POOL", "el indice de los obstaculos voladores es : " +poolFlyingObstaclesIndex);
+                poolFlyingObstacles[poolFlyingObstaclesIndex].setSpeedX(-OBSTACLES_SPEED);
+
+                if(poolFlyingObstacles[poolFlyingObstaclesIndex].isAnimated()){
+                    poolFlyingObstacles[poolFlyingObstaclesIndex].getAnimation().resetAnimation();
+                }
+                flyingObstacles.add(poolFlyingObstacles[poolFlyingObstaclesIndex]);
+
+
+                poolFlyingObstaclesIndex++;
+                if(poolFlyingObstaclesIndex == POOL_OBSTACLES_SIZE){
+                    poolFlyingObstaclesIndex = 0;
+                }
+
+            }
+
+            if (TIME_BETWEEN_GROUND_OBSTACLES - timeSinceLastGroundObstacle - UNIT_TIME <= DELAY_OBSTACLE) {
+                timeSinceLastGroundObstacle = TIME_BETWEEN_GROUND_OBSTACLES - UNIT_TIME - DELAY_OBSTACLE;
+            }
+        }
+        timeSinceLastFlyingObstacle -= TIME_BETWEEN_FLYING_OBSTACLES;
+
     }
 
 }

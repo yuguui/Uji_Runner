@@ -30,11 +30,17 @@ public class Assets {
     public static int heightForGroundObstacles, heightForFlyingObstacles;
     public static int groundObstacle1Width, groundObstacle2Width,groundObstacle3Width,groundObstacle4Width;
 
+    public static Bitmap flyingObstacle1, flyingObstacle2;
+    public static int flyingObstacle1Width, flyingObstacle2Width;
+
+
 
     public static final int CHARACTER_RUN_FRAME_WIDTH = 120;
     public static final int CHARACTER_RUN_FRAME_HEIGHT = 150;
+
     public static final int CHARACTER_JUMP_FRAME_WIDTH = 72;
     public static final int CHARACTER_JUMP_FRAME_HEIGHT = 150;
+
     public static final int CHARACTER_CROUCH_FRAME_WIDTH = 70;
     public static final int CHARACTER_CROUCH_FRAME_HEIGHT = 105;
 
@@ -45,8 +51,8 @@ public class Assets {
     private static final int CHICKEN_FRAME_WIDTH = 100;
 
     public static final int CHARACTER_RUN_NUMBER_OF_FRAMES  = 4;
-    public static final int CHARACTER_JUMP_NUMBER_OF_FRAMES  = 6;
-    public static final int CHARACTER_CROUCH_NUMBER_OF_FRAMES  = 5;
+    public static final int CHARACTER_JUMP_NUMBER_OF_FRAMES  = 60;
+    public static final int CHARACTER_CROUCH_NUMBER_OF_FRAMES  = 30;
 
     public static final float HEIGHT_RATIO_GROUND_OBSTACLE = 0.6f;
     public static final float HEIGHT_RATIO_FLYING_OBSTACLE = 0.85f;
@@ -111,6 +117,8 @@ public class Assets {
                 CHARACTER_CROUCH_NUMBER_OF_FRAMES, runnerCrouchesHeight , true);
 
 
+
+
         heightForGroundObstacles = (int) (playerHeight * HEIGHT_RATIO_GROUND_OBSTACLE);
         groundObstacle1Width = (heightForGroundObstacles * FACE_FRAME_WIDTH) /
                 FACE_FRAME_HEIGHT;
@@ -136,7 +144,16 @@ public class Assets {
 
 
 
+        heightForFlyingObstacles = (int) (playerHeight * HEIGHT_RATIO_FLYING_OBSTACLE);
+        flyingObstacle1Width = (heightForFlyingObstacles * FACE_FRAME_WIDTH) /
+                FACE_FRAME_HEIGHT;
+        flyingObstacle1 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
+                R.drawable.brick0), flyingObstacle1Width, heightForFlyingObstacles, true);
 
+        flyingObstacle2Width = (heightForFlyingObstacles * FACE_FRAME_WIDTH) /
+                FACE_FRAME_HEIGHT;
+        flyingObstacle2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
+                R.drawable.brick1), flyingObstacle2Width, heightForFlyingObstacles, true);
 
 
     }

@@ -138,10 +138,10 @@ public class Sprite {
             if (yCollider + colliderSizeY >= y && yCollider < y) {
                 return true;
             }
-            if (yCollider <= y + sizeY && yCollider > y + sizeY) {
+            if (yCollider <= y + sizeY && yCollider > y) {
                 return true;
             }
-            return true;
+            //return true;
 
         }
         if ( y <= yCollider && y + sizeY >= yCollider ) {

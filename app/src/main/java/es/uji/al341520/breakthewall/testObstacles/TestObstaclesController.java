@@ -92,6 +92,11 @@ public class TestObstaclesController implements IGameController{
             graphics.drawBitmap(model.getGroundObstacles().get(i).getBitmapToRender(),model.getGroundObstacles().get(i).getX(),model.getGroundObstacles().get(i).getY(),false);
 
         }
+
+        for (int i = 0; i < model.getFlyingObstacles().size();i++){
+            graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(),model.getFlyingObstacles().get(i).getX(),model.getFlyingObstacles().get(i).getY(),false);
+
+        }
         graphics.drawAnimatedBitmap(runner.getBitmapToRender(),runner.getFrame(),rect,false);
         return (graphics.getFrameBuffer());
 
