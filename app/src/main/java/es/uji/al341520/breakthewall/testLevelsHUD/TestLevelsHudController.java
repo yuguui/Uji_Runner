@@ -1,11 +1,11 @@
-package es.uji.al341520.breakthewall.testCharacter;
+package es.uji.al341520.breakthewall.testLevelsHUD;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
+import android.graphics.ColorSpace;
+import android.graphics.Movie;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.util.List;
 
@@ -15,8 +15,6 @@ import es.uji.al341520.breakthewall.framework.IGameController;
 import es.uji.al341520.breakthewall.framework.TouchHandler;
 import es.uji.al341520.breakthewall.model.Sprite;
 
-import static es.uji.al341520.breakthewall.testCharacter.TestCharacterModel.START_X;
-import static es.uji.al341520.breakthewall.testCharacter.TestCharacterModel.UNIT_TIME;
 import static es.uji.al341520.breakthewall.testParallax.TestParallaxModel.STAGE_HEIGHT;
 import static es.uji.al341520.breakthewall.testParallax.TestParallaxModel.STAGE_WIDTH;
 
@@ -24,13 +22,13 @@ import static es.uji.al341520.breakthewall.testParallax.TestParallaxModel.STAGE_
  * Created by al341520 on 20/04/18.
  */
 
-public class TestCharacterController implements IGameController{
-
+public class TestLevelsHudController implements IGameController{
 
     Graphics graphics;
 
-    private static final int BASELINE = 320;
+    private static final int BASELINE = 275;
     private static final float PLAYER_WIDTH_PERCENT = 0.15f;
+
     private static final int TOPLINE = BASELINE-100;
     private static final int THRESHOLD = 45;
 
@@ -39,10 +37,10 @@ public class TestCharacterController implements IGameController{
     float scaleX;
     float scaleY;
 
-    TestCharacterModel model;
+    TestLevelsHudModel model;
 
 
-    public TestCharacterController(Context context, int screenWidth, int screenHeight) {
+    public TestLevelsHudController(Context context, int screenWidth, int screenHeight) {
 
         graphics = new Graphics(context, STAGE_WIDTH, STAGE_HEIGHT);
 
@@ -51,7 +49,7 @@ public class TestCharacterController implements IGameController{
         playerWidth =(int) (STAGE_WIDTH * PLAYER_WIDTH_PERCENT);
 
         Assets.createAssets(context,playerWidth,STAGE_HEIGHT,STAGE_WIDTH);
-        model = new TestCharacterModel(playerWidth,BASELINE,TOPLINE,THRESHOLD);
+        model = new TestLevelsHudModel(playerWidth,BASELINE,TOPLINE,THRESHOLD);
 
     }
     @Override
@@ -80,21 +78,37 @@ public class TestCharacterController implements IGameController{
         graphics.drawLine(0,BASELINE,STAGE_WIDTH,BASELINE, Color.RED,5);
         graphics.drawLine(0,TOPLINE,STAGE_WIDTH,TOPLINE, Color.BLUE,5);
 
+
+        graphics.drawText(Integer.toString(model.getMeters()),Assets.METERS_POSITION_X, Assets.METERS_POSITION_Y, Color.WHITE, 10);
+        graphics.drawText(Integer.toString(model.getCollectedCoins()), Assets.COINS_POSITION_X, Assets.COINS_POSITION_Y, Color.WHITE, 10);
+        graphics.drawRect(Assets.HEALTH_POSITION_X, Assets.HEALTH_POSITION_Y, (Assets.HEALTH_WIDTH / model.MAXLIFE) * model.getHealth(), Assets.HEALTH_HEIGHT, Color.GREEN);
         Sprite runner = model.getRunner();
 
 
         RectF rect = new RectF(runner.getX(),runner.getY(),runner.getX()+runner.getSizeX(),runner.getY()+runner.getSizeY());
         try{
-            Log.e("ANIMACIONES", "El sprite es el de corriendo: " + (runner.getBitmapToRender() == Assets.characterRunning));
-            Log.e("ANIMACIONES", "Las esquinas arriba y abajo son: " + runner.getFrame().top + ", " + runner.getFrame().bottom + " las esquinas laterales son: " + runner.getFrame().right + ", " + runner.getFrame().left);
+            //Log.e("ANIMACIONES", "El sprite es el de corriendo: " + (runner.getBitmapToRender() == Assets.characterRunning));
+            //Log.e("ANIMACIONES", "Las esquinas arriba y abajo son: " + runner.getFrame().top + ", " + runner.getFrame().bottom + " las esquinas laterales son: " + runner.getFrame().right + ", " + runner.getFrame().left);
         }
         catch(Exception e){
 
             }
-//        Rect rect1 = new Rect(0,runner.getFrame().top,71,runner.getFrame().bottom);
+        for (int i = 0; i < model.getGroundObstacles().size();i++){
+            graphics.drawBitmap(model.getGroundObstacles().get(i).getBitmapToRender(),model.getGroundObstacles().get(i).getX(),model.getGroundObstacles().get(i).getY(),false);
+
+        }
+
+        for (int i = 0; i < model.getFlyingObstacles().size();i++){
+            graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(),model.getFlyingObstacles().get(i).getX(),model.getFlyingObstacles().get(i).getY(),false);
+
+        }
+
+        for (int i= 0; i< model.getCoins().size(); i++)
+        {
+            graphics.drawBitmap(model.getCoins().get(i).getBitmapToRender(), model.getCoins().get(i).getX(), model.getCoins().get(i).getY(),false);
+        }
 
         graphics.drawAnimatedBitmap(runner.getBitmapToRender(),runner.getFrame(),rect,false);
-        //(model.getRunner().getBitmapToRender(),model.getRunner().getX(), model.getRunner().getY(),false);
         return (graphics.getFrameBuffer());
 
     }

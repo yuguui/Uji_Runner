@@ -33,7 +33,8 @@ public class Assets {
     public static Bitmap flyingObstacle1, flyingObstacle2;
     public static int flyingObstacle1Width, flyingObstacle2Width;
 
-
+    public static Bitmap coin;
+    public static int coinWidth;
 
     public static final int CHARACTER_RUN_FRAME_WIDTH = 120;
     public static final int CHARACTER_RUN_FRAME_HEIGHT = 150;
@@ -58,7 +59,16 @@ public class Assets {
     public static final float HEIGHT_RATIO_FLYING_OBSTACLE = 0.85f;
     public static final float HEIGHT_RATIO_EXPLOSION = 0.85f;
 
+    public static final float METERS_POSITION_X = 20;
+    public static final float METERS_POSITION_Y = 20;
 
+    public static final float COINS_POSITION_X = 200;
+    public static final float COINS_POSITION_Y = 20;
+
+    public static final float HEALTH_POSITION_X = 100;
+    public static final float HEALTH_POSITION_Y = 20;
+    public static final int HEALTH_WIDTH = 20;
+    public static final int HEALTH_HEIGHT = 10;
 
 
 
