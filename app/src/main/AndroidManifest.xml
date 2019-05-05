@@ -24,6 +24,7 @@
         <activity android:name=".testLevelsHUD.TestLevelsHud"/>
 
 
+
     </application>
 
 </manifest>

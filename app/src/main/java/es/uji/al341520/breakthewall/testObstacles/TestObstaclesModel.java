@@ -11,8 +11,10 @@ import es.uji.al341520.breakthewall.model.Sprite;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_CROUCH_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_JUMP_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_RUN_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.FLYING_EXPLOSION_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.FLYING_OBSTACLE_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.GROUNDED_OBSTACLE_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.GROUND_EXPLOSION_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.characterRunning;
 import static es.uji.al341520.breakthewall.Assets.heightForFlyingObstacles;
 import static es.uji.al341520.breakthewall.Assets.playerHeight;
@@ -80,6 +82,9 @@ public class TestObstaclesModel {
 
     Animation grounded;
     Animation flying;
+
+    Animation groundExplosion;
+    Animation flyingExplosion;
 
 
     private static final int POOL_OBSTACLES_SIZE = 12;
@@ -178,6 +183,8 @@ public class TestObstaclesModel {
         grounded = new Animation(1,GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,Assets.groundObstacle1Width,Assets.heightForGroundObstacles,Assets.groundObstacle1Width * GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,30);
         flying =  new Animation(1,FLYING_OBSTACLE_NUMBER_OF_FRAMES,Assets.flyingObstacle1Width,Assets.heightForFlyingObstacles,Assets.flyingObstacle1Width * FLYING_OBSTACLE_NUMBER_OF_FRAMES,30);
 
+        groundExplosion = new Animation(1,GROUND_EXPLOSION_NUMBER_OF_FRAMES,Assets.groundedExplosionWidth,Assets.heightForGroundObstacles,Assets.groundedExplosionWidth * GROUND_EXPLOSION_NUMBER_OF_FRAMES, 30);
+        flyingExplosion = new Animation(1,FLYING_EXPLOSION_NUMBER_OF_FRAMES,Assets.flyingExplosionWidth,Assets.heightForFlyingObstacles,Assets.flyingExplosionWidth * FLYING_EXPLOSION_NUMBER_OF_FRAMES, 30);
 
 
         runner.addAnimation(running);
@@ -276,7 +283,15 @@ public class TestObstaclesModel {
         for(int i = 0; i < groundObstacles.size(); i++){
             if(runner.overlapBoundingBox(groundObstacles.get(i))){
                 groundObstacles.get(i).setX(STAGE_WIDTH);
+                //groundObstacles.get(i).setBitmapToRender(Assets.groundedExplosion);
+                //groundObstacles.get(i).getAnimation().resetAnimation();
                 groundObstacles.get(i).setSpeedX(0);
+
+                Sprite explosion = new Sprite(Assets.flyingExplosion,false,flyingObstacles.get(i).getX(),flyingObstacles.get(i).getY(),0,0,flyingObstacles.get(i).getSizeX(),flyingObstacles.get(i).getSizeY());
+
+                explosion.addAnimation(groundExplosion);
+                activeSprites.add(explosion);
+
                 groundObstacles.remove(i);
 
             }
@@ -285,8 +300,17 @@ public class TestObstaclesModel {
         for(int i = 0; i < flyingObstacles.size(); i++){
             if(runner.overlapBoundingBox(flyingObstacles.get(i))){
                 flyingObstacles.get(i).setX(STAGE_WIDTH);
+                //flyingObstacles.get(i).setBitmapToRender(Assets.flyingExplosion);
+                //flyingObstacles.get(i).getAnimation().resetAnimation();
                 flyingObstacles.get(i).setSpeedX(0);
+
+                Sprite explosion = new Sprite(Assets.flyingExplosion,false,flyingObstacles.get(i).getX(),flyingObstacles.get(i).getY(),0,0,flyingObstacles.get(i).getSizeX(),flyingObstacles.get(i).getSizeY());
+
+                explosion.addAnimation(groundExplosion);
+                activeSprites.add(explosion);
+
                 flyingObstacles.remove(i);
+
             }
 
 
@@ -317,6 +341,11 @@ public class TestObstaclesModel {
                 flyingObstacles.get(i).setSpeedX(0);
                 flyingObstacles.remove(i);
             }
+
+        }
+        for (int i = 0; i < activeSprites.size();i++){
+            activeSprites.get(i).getAnimation().getCurrentFrame(UNIT_TIME);
+
 
         }
 
@@ -412,7 +441,6 @@ public class TestObstaclesModel {
                     poolGroundObstacles[poolGroundObstaclesIndex].getAnimation().resetAnimation();
                 }
                 groundObstacles.add(poolGroundObstacles[poolGroundObstaclesIndex]);
-                activeSprites.add(poolGroundObstacles[poolGroundObstaclesIndex]);
                 poolGroundObstaclesIndex++;
                 if (poolGroundObstaclesIndex == POOL_OBSTACLES_SIZE) {
                     poolGroundObstaclesIndex = 0;
@@ -446,6 +474,8 @@ public class TestObstaclesModel {
                     poolFlyingObstacles[poolFlyingObstaclesIndex].getAnimation().resetAnimation();
                 }
                 flyingObstacles.add(poolFlyingObstacles[poolFlyingObstaclesIndex]);
+                activeSprites.add(poolFlyingObstacles[poolFlyingObstaclesIndex]);
+
 
 
                 poolFlyingObstaclesIndex++;

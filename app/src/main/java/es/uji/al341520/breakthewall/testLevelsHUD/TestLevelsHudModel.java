@@ -323,9 +323,8 @@ public class TestLevelsHudModel {
 
                 groundObstacles.get(i).setX(STAGE_WIDTH);
                 groundObstacles.get(i).setSpeedX(0);
-                groundObstacles.remove(i);
 
-                Bitmap image = flyingObstacles.get(i).getBitmapToRender();
+                Bitmap image = groundObstacles.get(i).getBitmapToRender();
                 if(image == Assets.groundObstacle1)
                 {
                     currentLife -= GROUND_EASY_DAMAGE;
@@ -338,6 +337,9 @@ public class TestLevelsHudModel {
                 {
                     currentLife -= GROUND_HARD_DAMAGE;
                 }
+
+                groundObstacles.remove(i);
+
             }
         }
 
@@ -346,7 +348,6 @@ public class TestLevelsHudModel {
 
                 flyingObstacles.get(i).setX(STAGE_WIDTH);
                 flyingObstacles.get(i).setSpeedX(0);
-                flyingObstacles.remove(i);
 
                 Bitmap image = flyingObstacles.get(i).getBitmapToRender();
                 if(image == Assets.flyingObstacle1)
@@ -357,6 +358,9 @@ public class TestLevelsHudModel {
                 {
                     currentLife -= AIR_MEDIUM_DAMAGE;
                 }
+                flyingObstacles.remove(i);
+
+
             }
         }
 

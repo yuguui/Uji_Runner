@@ -33,6 +33,9 @@ public class Assets {
     public static Bitmap flyingObstacle1, flyingObstacle2;
     public static int flyingObstacle1Width, flyingObstacle2Width;
 
+    public static Bitmap flyingExplosion, groundedExplosion;
+    public static int flyingExplosionWidth, groundedExplosionWidth;
+
     public static Bitmap coin;
     public static int coinWidth;
 
@@ -58,6 +61,9 @@ public class Assets {
 
     public static final int GROUNDED_OBSTACLE_NUMBER_OF_FRAMES  = 30;
     public static final int FLYING_OBSTACLE_NUMBER_OF_FRAMES  = 30;
+
+    public static final int GROUND_EXPLOSION_NUMBER_OF_FRAMES  = 15;
+    public static final int FLYING_EXPLOSION_NUMBER_OF_FRAMES  = 15;
 
 
 
@@ -158,7 +164,7 @@ public class Assets {
                 resources, R.drawable.brick3), groundObstacle4Width,
                 heightForGroundObstacles, true);
 
-        coinWidth = groundObstacle1.getWidth();
+        coinWidth = groundObstacle2.getWidth();
         coin = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.brick0), coinWidth, heightForGroundObstacles, true);
 
 
@@ -172,6 +178,18 @@ public class Assets {
                 FACE_FRAME_HEIGHT;
         flyingObstacle2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
                 R.drawable.brick1), flyingObstacle2Width, heightForFlyingObstacles, true);
+
+
+
+        flyingExplosionWidth = (heightForFlyingObstacles * FACE_FRAME_WIDTH) / FACE_FRAME_HEIGHT;
+
+        flyingExplosion = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
+                R.drawable.ball), flyingExplosionWidth * FLYING_EXPLOSION_NUMBER_OF_FRAMES, heightForFlyingObstacles, true);
+
+        groundedExplosionWidth = (heightForGroundObstacles * FACE_FRAME_WIDTH) / FACE_FRAME_HEIGHT;
+
+        groundedExplosion = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
+                R.drawable.paddle), groundedExplosionWidth*GROUND_EXPLOSION_NUMBER_OF_FRAMES, heightForGroundObstacles, true);
 
 
         
