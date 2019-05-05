@@ -528,9 +528,10 @@ public class TestLevelsHudModel {
                 if (TIME_BETWEEN_FLYING_OBSTACLES - timeSinceLastFlyingObstacle - UNIT_TIME <= DELAY_OBSTACLE) {
                     timeSinceLastFlyingObstacle = TIME_BETWEEN_FLYING_OBSTACLES - UNIT_TIME - DELAY_OBSTACLE;
                 }
-                timeSinceLastGroundObstacle -= TIME_BETWEEN_GROUND_OBSTACLES;
 
             }
+            timeSinceLastGroundObstacle -= TIME_BETWEEN_GROUND_OBSTACLES;
+
 
         }
     }
@@ -572,10 +573,10 @@ public class TestLevelsHudModel {
                     poolFlyingObstaclesIndex = 0;
                 }
 
-            }
+                if (TIME_BETWEEN_GROUND_OBSTACLES - timeSinceLastGroundObstacle - UNIT_TIME <= DELAY_OBSTACLE) {
+                    timeSinceLastGroundObstacle = TIME_BETWEEN_GROUND_OBSTACLES - UNIT_TIME - DELAY_OBSTACLE;
+                }
 
-            if (TIME_BETWEEN_GROUND_OBSTACLES - timeSinceLastGroundObstacle - UNIT_TIME <= DELAY_OBSTACLE) {
-                timeSinceLastGroundObstacle = TIME_BETWEEN_GROUND_OBSTACLES - UNIT_TIME - DELAY_OBSTACLE;
             }
             timeSinceLastFlyingObstacle -= TIME_BETWEEN_FLYING_OBSTACLES;
 
