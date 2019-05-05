@@ -36,6 +36,10 @@ public class Assets {
     public static Bitmap coin;
     public static int coinWidth;
 
+    public static Bitmap gameOverImage;
+    public static int GAME_OVER_HEIGHT = 200;
+    public static int GAME_OVER_WIDTH = 300;
+
     public static final int CHARACTER_RUN_FRAME_WIDTH = 120;
     public static final int CHARACTER_RUN_FRAME_HEIGHT = 150;
 
@@ -68,12 +72,12 @@ public class Assets {
     public static final float METERS_POSITION_X = 20;
     public static final float METERS_POSITION_Y = 20;
 
-    public static final float COINS_POSITION_X = 200;
+    public static final float COINS_POSITION_X = 320;
     public static final float COINS_POSITION_Y = 20;
 
     public static final float HEALTH_POSITION_X = 100;
     public static final float HEALTH_POSITION_Y = 20;
-    public static final int HEALTH_WIDTH = 20;
+    public static final float HEALTH_WIDTH = 200;
     public static final int HEALTH_HEIGHT = 10;
 
 
@@ -91,8 +95,14 @@ public class Assets {
         if (characterRunning != null)              characterRunning.recycle();
         if (characterCrouching != null)            characterCrouching.recycle();
         if (characterJumping != null)              characterJumping.recycle();
-
-
+        if (groundObstacle1 != null)               groundObstacle1.recycle();
+        if (groundObstacle2 != null)               groundObstacle2.recycle();
+        if (groundObstacle3 != null)               groundObstacle3.recycle();
+        if (groundObstacle4 != null)               groundObstacle4.recycle();
+        if (flyingObstacle1 != null)               flyingObstacle1.recycle();
+        if (flyingObstacle2 != null)               flyingObstacle2.recycle();
+        if (gameOverImage != null)                 gameOverImage.recycle();
+        if (coin != null)                          coin.recycle();
 
 
         int[] bgLayersResources = {
@@ -158,9 +168,10 @@ public class Assets {
                 resources, R.drawable.brick3), groundObstacle4Width,
                 heightForGroundObstacles, true);
 
-        coinWidth = groundObstacle1.getWidth();
+        coinWidth = groundObstacle2.getWidth();
         coin = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.brick0), coinWidth, heightForGroundObstacles, true);
 
+        gameOverImage = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,R.drawable.boton), GAME_OVER_WIDTH, GAME_OVER_HEIGHT, true);
 
         heightForFlyingObstacles = (int) (playerHeight * HEIGHT_RATIO_FLYING_OBSTACLE);
         flyingObstacle1Width = (heightForFlyingObstacles * FACE_FRAME_WIDTH) /
@@ -174,7 +185,7 @@ public class Assets {
                 R.drawable.brick1), flyingObstacle2Width, heightForFlyingObstacles, true);
 
 
-        
+
 
 
 

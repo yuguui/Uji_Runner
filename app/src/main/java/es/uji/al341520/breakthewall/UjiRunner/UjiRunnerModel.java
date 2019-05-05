@@ -1,4 +1,4 @@
-package es.uji.al341520.breakthewall.testLevelsHUD;
+package es.uji.al341520.breakthewall.UjiRunner;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -17,9 +17,8 @@ import static es.uji.al341520.breakthewall.Assets.CHARACTER_RUN_NUMBER_OF_FRAMES
 import static es.uji.al341520.breakthewall.Assets.FLYING_OBSTACLE_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.GROUNDED_OBSTACLE_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.characterRunning;
-import static es.uji.al341520.breakthewall.Assets.coin;
 
-public class TestLevelsHudModel {
+public class UjiRunnerModel {
 
     public static final float UNIT_TIME = 1f/30;
 
@@ -50,6 +49,7 @@ public class TestLevelsHudModel {
     private int coinsCollected;
 
     private float tickTime;
+    private GameState gameState;
 
     private enum RunnerState {RUNNING, CROUCHING, JUMPING}
 
@@ -117,11 +117,11 @@ public class TestLevelsHudModel {
     private static final int HEALTH_INCREASE = 5;
 
 
-    private static final int GROUND_EASY_DAMAGE = 2;
+    private static final int GROUND_EASY_DAMAGE = 50;
     private static final int GROUND_MEDIUM_DAMAGE =4;
     private static final int GROUND_HARD_DAMAGE = 6;
 
-    private static final int AIR_EASY_DAMAGE = 4;
+    private static final int AIR_EASY_DAMAGE = 50;
     private static final int AIR_MEDIUM_DAMAGE = 6;
     private static final int AIR_HARD_DAMAGE = 8;
 
@@ -161,7 +161,7 @@ public class TestLevelsHudModel {
 
 
 
-    public TestLevelsHudModel(int playerWidth, int baseline, int topline, int threshold){
+    public UjiRunnerModel(int playerWidth, int baseline, int topline, int threshold){
         this.playerWidth = playerWidth;
         this.baseline = baseline;
         this.topline = topline;
@@ -273,10 +273,28 @@ public class TestLevelsHudModel {
         currentMeters = 0;
         coinsCollected = 0;
         currentLevel = Level.EASY;
+        gameState = GameState.WAITING;
     }
 
 
     public void update(float deltaTime) {
+        switch (gameState)
+        {
+            case WAITING:
+                break;
+            case PLAYING:
+                playGame(deltaTime);
+                break;
+            case RUNNER_DIES:
+                break;
+            case END_GAME:
+                break;
+        }
+    }
+
+
+    private void playGame(float deltaTime)
+    {
         tickTime += deltaTime;
         while (tickTime >= UNIT_TIME) {
             tickTime -= UNIT_TIME;
@@ -298,7 +316,6 @@ public class TestLevelsHudModel {
             updateMeters();
         }
     }
-
     private void updateParallaxBg() {
         for (int i = 0; i < PARALLAX_LAYERS; i++) {
             shiftedBgParallax[i].move(UNIT_TIME);
@@ -335,6 +352,10 @@ public class TestLevelsHudModel {
                     currentLife -= GROUND_HARD_DAMAGE;
                 }
 
+                if(currentLife <= 0)
+                {
+                    gameState = GameState.RUNNER_DIES;
+                }
                 groundObstacles.get(i).setX(STAGE_WIDTH);
                 groundObstacles.get(i).setSpeedX(0);
                 groundObstacles.remove(i);
@@ -355,7 +376,10 @@ public class TestLevelsHudModel {
                 {
                     currentLife -= AIR_MEDIUM_DAMAGE;
                 }
-
+                if(currentLife <= 0)
+                {
+                    gameState = GameState.RUNNER_DIES;
+                }
                 flyingObstacles.get(i).setX(STAGE_WIDTH);
                 flyingObstacles.get(i).setSpeedX(0);
                 flyingObstacles.remove(i);
@@ -404,8 +428,16 @@ public class TestLevelsHudModel {
 
 
 
-    public void onTouch(float x, float y){
-        UpdatePosition(x,y);
+    public void onTouch(float x, float y)
+    {
+        if(isPlaying())
+        {
+            UpdatePosition(x,y);
+        }
+        if(isWaiting())
+        {
+            gameState = GameState.PLAYING;
+        }
     }
 
     private void UpdatePosition(float targetX, float targetY){
@@ -682,6 +714,30 @@ public class TestLevelsHudModel {
         }
     }
 
+    public void restartGame()
+    {
+        start();
+    }
+
+
+    private void start()
+    {
+        poolGroundObstaclesIndex= 0;
+        poolFlyingObstaclesIndex= 0;
+        poolCoinsIndex = 0;
+
+        currentLife = MAXLIFE;
+        currentMeters = 0;
+        coinsCollected = 0;
+        currentLevel = Level.EASY;
+        gameState = GameState.WAITING;
+    }
+
+    public void setGameOver()
+    {
+        gameState = GameState.END_GAME;
+    }
+
     public int getHealth()
     {
         return currentLife;
@@ -696,4 +752,35 @@ public class TestLevelsHudModel {
     {
         return currentMeters;
     }
+
+    public boolean isWaiting()
+    {
+        return gameState==GameState.WAITING;
+    }
+
+    public boolean isPlaying()
+    {
+        return gameState==GameState.PLAYING;
+    }
+
+    public boolean isDying()
+    {
+        return gameState==GameState.RUNNER_DIES;
+    }
+
+    public boolean isOver()
+    {
+        return gameState==GameState.END_GAME;
+    }
+
+    enum GameState
+    {
+        WAITING,
+        PLAYING,
+        RUNNER_DIES,
+        END_GAME;
+
+
+    }
 }
+

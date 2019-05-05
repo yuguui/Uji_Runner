@@ -22,6 +22,7 @@
         <activity android:name=".testCharacter.TestCharacter"/>
         <activity android:name=".testObstacles.TestObstacles"/>
         <activity android:name=".testLevelsHUD.TestLevelsHud"/>
+        <activity android:name=".UjiRunner.UjiRunner"/>
 
 
     </application>
