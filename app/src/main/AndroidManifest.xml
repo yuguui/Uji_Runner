@@ -21,6 +21,7 @@
         <activity android:name=".testParallax.TestParallax"/>
         <activity android:name=".testCharacter.TestCharacter"/>
         <activity android:name=".testObstacles.TestObstacles"/>
+        <activity android:name=".testLevelsHUD.TestLevelsHud"/>
 
 
     </application>

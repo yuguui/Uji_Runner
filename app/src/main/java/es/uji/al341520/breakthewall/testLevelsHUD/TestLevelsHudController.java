@@ -78,10 +78,6 @@ public class TestLevelsHudController implements IGameController{
         graphics.drawLine(0,BASELINE,STAGE_WIDTH,BASELINE, Color.RED,5);
         graphics.drawLine(0,TOPLINE,STAGE_WIDTH,TOPLINE, Color.BLUE,5);
 
-
-        graphics.drawText(Integer.toString(model.getMeters()),Assets.METERS_POSITION_X, Assets.METERS_POSITION_Y, Color.WHITE, 10);
-        graphics.drawText(Integer.toString(model.getCollectedCoins()), Assets.COINS_POSITION_X, Assets.COINS_POSITION_Y, Color.WHITE, 10);
-        graphics.drawRect(Assets.HEALTH_POSITION_X, Assets.HEALTH_POSITION_Y, (Assets.HEALTH_WIDTH / model.MAXLIFE) * model.getHealth(), Assets.HEALTH_HEIGHT, Color.GREEN);
         Sprite runner = model.getRunner();
 
 
@@ -92,15 +88,29 @@ public class TestLevelsHudController implements IGameController{
         }
         catch(Exception e){
 
-            }
+        }
         for (int i = 0; i < model.getGroundObstacles().size();i++){
-            graphics.drawBitmap(model.getGroundObstacles().get(i).getBitmapToRender(),model.getGroundObstacles().get(i).getX(),model.getGroundObstacles().get(i).getY(),false);
+            Sprite obstacle = model.getGroundObstacles().get(i);
+            if(obstacle.isAnimated()){
+                RectF rectObstacle = new RectF(obstacle.getX(),obstacle.getY(),obstacle.getX()+obstacle.getSizeX(),obstacle.getY()+obstacle.getSizeY());
+                graphics.drawAnimatedBitmap(obstacle.getBitmapToRender(),obstacle.getFrame(),rectObstacle,false);
+            }
+            else {
+                graphics.drawBitmap(model.getGroundObstacles().get(i).getBitmapToRender(),model.getGroundObstacles().get(i).getX(),model.getGroundObstacles().get(i).getY(),false);
+            }
+
 
         }
 
         for (int i = 0; i < model.getFlyingObstacles().size();i++){
-            graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(),model.getFlyingObstacles().get(i).getX(),model.getFlyingObstacles().get(i).getY(),false);
-
+            Sprite obstacle = model.getFlyingObstacles().get(i);
+            if(obstacle.isAnimated()){
+                RectF rectObstacle = new RectF(obstacle.getX(),obstacle.getY(),obstacle.getX()+obstacle.getSizeX(),obstacle.getY()+obstacle.getSizeY());
+                graphics.drawAnimatedBitmap(obstacle.getBitmapToRender(),obstacle.getFrame(),rectObstacle,false);
+            }
+            else {
+                graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(), model.getFlyingObstacles().get(i).getX(), model.getFlyingObstacles().get(i).getY(), false);
+            }
         }
 
         for (int i= 0; i< model.getCoins().size(); i++)
