@@ -174,6 +174,10 @@ public class Assets {
                 R.drawable.brick1), flyingObstacle2Width, heightForFlyingObstacles, true);
 
 
+        
+
+
+
     }
 
 }

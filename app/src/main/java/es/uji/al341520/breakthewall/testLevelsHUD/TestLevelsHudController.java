@@ -78,6 +78,9 @@ public class TestLevelsHudController implements IGameController{
         graphics.drawLine(0,BASELINE,STAGE_WIDTH,BASELINE, Color.RED,5);
         graphics.drawLine(0,TOPLINE,STAGE_WIDTH,TOPLINE, Color.BLUE,5);
 
+        graphics.drawText(Integer.toString(model.getMeters()),Assets.METERS_POSITION_X, Assets.METERS_POSITION_Y, Color.WHITE, 10);
+        graphics.drawText(Integer.toString(model.getCollectedCoins()), Assets.COINS_POSITION_X, Assets.COINS_POSITION_Y, Color.WHITE, 10);
+        graphics.drawRect(Assets.HEALTH_POSITION_X, Assets.HEALTH_POSITION_Y, (Assets.HEALTH_WIDTH / model.MAXLIFE) * model.getHealth(), Assets.HEALTH_HEIGHT, Color.GREEN);
         Sprite runner = model.getRunner();
 
 
