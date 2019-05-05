@@ -152,6 +152,8 @@ public class Assets {
                 resources, R.drawable.brick3), groundObstacle4Width,
                 heightForGroundObstacles, true);
 
+        coinWidth = groundObstacle1.getWidth();
+        coin = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.brick0), coinWidth, heightForGroundObstacles, true);
 
 
         heightForFlyingObstacles = (int) (playerHeight * HEIGHT_RATIO_FLYING_OBSTACLE);
