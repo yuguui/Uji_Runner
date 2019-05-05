@@ -25,6 +25,7 @@
         <activity android:name=".UjiRunner.UjiRunner"/>
 
 
+
     </application>
 
 </manifest>
