@@ -104,7 +104,6 @@ public class TestObstaclesController implements IGameController{
         for (int i = 0; i < model.getFlyingObstacles().size();i++){
             Sprite obstacle = model.getFlyingObstacles().get(i);
             if(obstacle.isAnimated()){
-                Log.wtf("ANIMATION", "ESTE SPRITE TIENE ANIMACION");
                 RectF rectObstacle = new RectF(obstacle.getX(),obstacle.getY(),obstacle.getX()+obstacle.getSizeX(),obstacle.getY()+obstacle.getSizeY());
                 graphics.drawAnimatedBitmap(obstacle.getBitmapToRender(),obstacle.getFrame(),rectObstacle,false);
             }
