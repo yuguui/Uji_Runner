@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import es.uji.al341520.breakthewall.testCharacter.TestCharacter;
+import es.uji.al341520.breakthewall.testLevelsHUD.TestLevelsHud;
 import es.uji.al341520.breakthewall.testObstacles.TestObstacles;
 import es.uji.al341520.breakthewall.testParallax.TestParallax;
 import es.uji.al341520.breakthewall.testFramework.TestFramework;
@@ -35,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
     public void testObstacles(View view){
         Intent intent = new Intent(this, TestObstacles.class);
         startActivity(intent);
-    }/*
+    }
     public void testLevelsHud(View view){
         Intent intent = new Intent(this, TestLevelsHud.class);
         startActivity(intent);
-    }
+    }/*
     public void ujiRunner(View view){
         Intent intent = new Intent(this, UjiRunner.class);
         startActivity(intent);

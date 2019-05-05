@@ -14,6 +14,8 @@ import es.uji.al341520.breakthewall.model.TimedSprite;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_CROUCH_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_JUMP_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_RUN_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.FLYING_OBSTACLE_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.GROUNDED_OBSTACLE_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.characterRunning;
 import static es.uji.al341520.breakthewall.Assets.coin;
 
@@ -36,7 +38,6 @@ public class TestLevelsHudModel {
     public static final int JUMP_OFFSET = 50;
 
     public static final int MAXLIFE = 100;
-
 
 
     private int playerWidth;
@@ -81,17 +82,20 @@ public class TestLevelsHudModel {
     Animation crouching;
     Animation jumping;
 
+    Animation grounded;
+    Animation flying;
+
 
     private static final int POOL_OBSTACLES_SIZE = 12;
     private static final int POOL_COINS_SIZE = 5;
 
-    private static final float GROUNDED1_SPAWN_CHANCE = 0.15f;
-    private static final float GROUNDED2_SPAWN_CHANCE = 0.45f;
-    private static final float GROUNDED3_SPAWN_CHANCE = 0.7f;
+    private static final float GROUNDED1_SPAWN_CHANCE = 0.75f;
+    private static final float GROUNDED2_SPAWN_CHANCE = 0.85f;
+    private static final float GROUNDED3_SPAWN_CHANCE = 0.9f;
     private static final float GROUNDED4_SPAWN_CHANCE = 1f;
 
 
-    private static final float FLYING1_SPAWN_CHANCE = 0.2f;
+    private static final float FLYING1_SPAWN_CHANCE = 0.8f;
     private static final float FLYING2_SPAWN_CHANCE = 1f;
 
 
@@ -196,15 +200,21 @@ public class TestLevelsHudModel {
         runnerWidths[RunnerState.JUMPING.ordinal()] = Assets.runnerJumpsWidth;
         runnerHeights[RunnerState.JUMPING.ordinal()] = Assets.runnerJumpsHeight;
 
-        running = new Animation(1, CHARACTER_RUN_NUMBER_OF_FRAMES,runnerWidths[0],runnerHeights[0],runnerWidths[0]*(CHARACTER_RUN_NUMBER_OF_FRAMES),30);
+        running = new Animation(1, CHARACTER_RUN_NUMBER_OF_FRAMES,runnerWidths[0],runnerHeights[0],runnerWidths[0]*(CHARACTER_RUN_NUMBER_OF_FRAMES),5);
         crouching = new Animation(1, CHARACTER_CROUCH_NUMBER_OF_FRAMES,runnerWidths[1],runnerHeights[1],runnerWidths[1]*CHARACTER_CROUCH_NUMBER_OF_FRAMES ,30);
         jumping = new Animation(1, CHARACTER_JUMP_NUMBER_OF_FRAMES,runnerWidths[2],runnerHeights[2],runnerWidths[2]*CHARACTER_JUMP_NUMBER_OF_FRAMES ,30);
+
+
+        grounded = new Animation(1,GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,Assets.groundObstacle1Width,Assets.heightForGroundObstacles,Assets.groundObstacle1Width * GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,30);
+        flying =  new Animation(1,FLYING_OBSTACLE_NUMBER_OF_FRAMES,Assets.flyingObstacle1Width,Assets.heightForFlyingObstacles,Assets.flyingObstacle1Width * FLYING_OBSTACLE_NUMBER_OF_FRAMES,30);
+
 
         runner.addAnimation(running);
         runner.addAnimation(crouching);
         runner.addAnimation(jumping);
 
         //OBSTACLES
+
 
 
         groundObstacles = new ArrayList<>();
@@ -220,6 +230,7 @@ public class TestLevelsHudModel {
             double random = Math.random();
             if(random<=GROUNDED1_SPAWN_CHANCE){
                 poolGroundObstacles[i]= new Sprite(Assets.groundObstacle1,false,STAGE_WIDTH,baseline-Assets.heightForGroundObstacles,0,0,Assets.groundObstacle1Width,Assets.heightForGroundObstacles);
+                poolGroundObstacles[i].addAnimation(grounded);
             }
             else if(random<GROUNDED2_SPAWN_CHANCE){
                 poolGroundObstacles[i]= new Sprite(Assets.groundObstacle2,false,STAGE_WIDTH,baseline-Assets.heightForGroundObstacles,0,0,Assets.groundObstacle2Width,Assets.heightForGroundObstacles);
@@ -237,6 +248,7 @@ public class TestLevelsHudModel {
             double random = Math.random();
             if(random<=FLYING1_SPAWN_CHANCE){
                 poolFlyingObstacles[i]= new Sprite(Assets.flyingObstacle1,false,STAGE_WIDTH,topline-(2*Assets.heightForFlyingObstacles/3),0,0,Assets.flyingObstacle1Width,Assets.heightForFlyingObstacles);
+                poolFlyingObstacles[i].addAnimation(flying);
             }
             else{
                 poolFlyingObstacles[i]= new Sprite(Assets.flyingObstacle2,false,STAGE_WIDTH,topline-(2*Assets.heightForFlyingObstacles/3),0,0,Assets.flyingObstacle2Width,Assets.heightForFlyingObstacles);
@@ -364,6 +376,9 @@ public class TestLevelsHudModel {
 
     private void updateObstacles(){
         for (int i = 0; i < groundObstacles.size();i++){
+            if(groundObstacles.get(i).isAnimated()){
+                groundObstacles.get(i).setFrame(groundObstacles.get(i).getAnimation().getCurrentFrame(UNIT_TIME));
+            }
             groundObstacles.get(i).move(UNIT_TIME);
             if(groundObstacles.get(i).getX() < -groundObstacles.get(i).getSizeX()){
                 groundObstacles.get(i).setX(STAGE_WIDTH);
@@ -372,8 +387,10 @@ public class TestLevelsHudModel {
             }
         }
         for (int i = 0; i < flyingObstacles.size();i++){
+            if(flyingObstacles.get(i).isAnimated()){
+                flyingObstacles.get(i).setFrame(flyingObstacles.get(i).getAnimation().getCurrentFrame(UNIT_TIME));
+            }
             flyingObstacles.get(i).move(UNIT_TIME);
-            Log.wtf("POOL", "La speed del objeto " + i +" es : " + flyingObstacles.get(i).getSpeedX());
             if(flyingObstacles.get(i).getX() < -flyingObstacles.get(i).getSizeX()){
                 flyingObstacles.get(i).setX(STAGE_WIDTH);
                 flyingObstacles.get(i).setSpeedX(0);
@@ -461,6 +478,9 @@ public class TestLevelsHudModel {
 
         if (timeSinceLastGroundObstacle >= TIME_BETWEEN_GROUND_OBSTACLES) {
             r = Math.random();
+            if (poolGroundObstacles[poolGroundObstaclesIndex].isAnimated()) {
+                poolGroundObstacles[poolGroundObstaclesIndex].getAnimation().resetAnimation();
+            }
 
             Log.wtf("RANDOM", "EL RANDOM DE GROUND HA SIDO : "+ r);
             if(currentLevel.isEasy())
@@ -498,10 +518,6 @@ public class TestLevelsHudModel {
                 }
                 groundObstacles.add(poolGroundObstacles[poolGroundObstaclesIndex]);
 
-                if (poolGroundObstacles[poolGroundObstaclesIndex].isAnimated()) {
-                    poolGroundObstacles[poolGroundObstaclesIndex].getAnimation().resetAnimation();
-                }
-
                 poolGroundObstaclesIndex++;
                 if (poolGroundObstaclesIndex == POOL_OBSTACLES_SIZE) {
                     poolGroundObstaclesIndex = 0;
@@ -512,8 +528,9 @@ public class TestLevelsHudModel {
                 if (TIME_BETWEEN_FLYING_OBSTACLES - timeSinceLastFlyingObstacle - UNIT_TIME <= DELAY_OBSTACLE) {
                     timeSinceLastFlyingObstacle = TIME_BETWEEN_FLYING_OBSTACLES - UNIT_TIME - DELAY_OBSTACLE;
                 }
+                timeSinceLastGroundObstacle -= TIME_BETWEEN_GROUND_OBSTACLES;
+
             }
-            timeSinceLastGroundObstacle -= TIME_BETWEEN_GROUND_OBSTACLES;
 
         }
     }
@@ -560,8 +577,9 @@ public class TestLevelsHudModel {
             if (TIME_BETWEEN_GROUND_OBSTACLES - timeSinceLastGroundObstacle - UNIT_TIME <= DELAY_OBSTACLE) {
                 timeSinceLastGroundObstacle = TIME_BETWEEN_GROUND_OBSTACLES - UNIT_TIME - DELAY_OBSTACLE;
             }
+            timeSinceLastFlyingObstacle -= TIME_BETWEEN_FLYING_OBSTACLES;
+
         }
-        timeSinceLastFlyingObstacle -= TIME_BETWEEN_FLYING_OBSTACLES;
 
     }
 
