@@ -53,6 +53,8 @@ public class TestObstaclesController implements IGameController{
     }
     @Override
     public void onUpdate(float deltaTime, List<TouchHandler.TouchEvent> touchEvents){
+        Log.wtf("Explosion", "el tamaño de las explosiones es : " + model.getActiveSprites().size());
+
         model.update(deltaTime);
         for (int i = 0; i< touchEvents.size(); i++){
             switch (touchEvents.get(i).type){
@@ -110,6 +112,12 @@ public class TestObstaclesController implements IGameController{
             else {
                 graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(), model.getFlyingObstacles().get(i).getX(), model.getFlyingObstacles().get(i).getY(), false);
             }
+        }
+
+        for (int i = 0; i < model.getActiveSprites().size();i++){
+            Sprite obstacle = model.getActiveSprites().get(i);
+            RectF rectObstacle = new RectF(obstacle.getX(),obstacle.getY(),obstacle.getX()+obstacle.getSizeX(),obstacle.getY()+obstacle.getSizeY());
+            graphics.drawAnimatedBitmap(obstacle.getBitmapToRender(),obstacle.getFrame(),rectObstacle,false);
         }
         graphics.drawAnimatedBitmap(runner.getBitmapToRender(),runner.getFrame(),rect,false);
         return (graphics.getFrameBuffer());

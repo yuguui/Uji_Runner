@@ -282,13 +282,14 @@ public class TestObstaclesModel {
         runner.setFrame(runner.getAnimation(runnerState.ordinal()).getCurrentFrame(UNIT_TIME));
         for(int i = 0; i < groundObstacles.size(); i++){
             if(runner.overlapBoundingBox(groundObstacles.get(i))){
+                Sprite explosion = new Sprite(Assets.groundedExplosion,false,groundObstacles.get(i).getX(),groundObstacles.get(i).getY(),0,0,groundObstacles.get(i).getSizeX(),groundObstacles.get(i).getSizeY());
+
                 groundObstacles.get(i).setX(STAGE_WIDTH);
                 //groundObstacles.get(i).setBitmapToRender(Assets.groundedExplosion);
                 //groundObstacles.get(i).getAnimation().resetAnimation();
                 groundObstacles.get(i).setSpeedX(0);
 
-                Sprite explosion = new Sprite(Assets.flyingExplosion,false,flyingObstacles.get(i).getX(),flyingObstacles.get(i).getY(),0,0,flyingObstacles.get(i).getSizeX(),flyingObstacles.get(i).getSizeY());
-
+                groundExplosion.resetAnimation();
                 explosion.addAnimation(groundExplosion);
                 activeSprites.add(explosion);
                 
@@ -300,14 +301,17 @@ public class TestObstaclesModel {
 
         for(int i = 0; i < flyingObstacles.size(); i++){
             if(runner.overlapBoundingBox(flyingObstacles.get(i))){
+
+                Sprite explosion = new Sprite(Assets.flyingExplosion,false,flyingObstacles.get(i).getX(),flyingObstacles.get(i).getY(),0,0,flyingObstacles.get(i).getSizeX(),flyingObstacles.get(i).getSizeY());
+
                 flyingObstacles.get(i).setX(STAGE_WIDTH);
                 //flyingObstacles.get(i).setBitmapToRender(Assets.flyingExplosion);
                 //flyingObstacles.get(i).getAnimation().resetAnimation();
                 flyingObstacles.get(i).setSpeedX(0);
 
-                Sprite explosion = new Sprite(Assets.flyingExplosion,false,flyingObstacles.get(i).getX(),flyingObstacles.get(i).getY(),0,0,flyingObstacles.get(i).getSizeX(),flyingObstacles.get(i).getSizeY());
 
-                explosion.addAnimation(groundExplosion);
+                flyingExplosion.resetAnimation();
+                explosion.addAnimation(flyingExplosion);
                 activeSprites.add(explosion);
 
                 flyingObstacles.remove(i);
@@ -345,8 +349,11 @@ public class TestObstaclesModel {
 
         }
         for (int i = 0; i < activeSprites.size();i++){
-            activeSprites.get(i).getAnimation().getCurrentFrame(UNIT_TIME);
 
+            activeSprites.get(i).setFrame(activeSprites.get(i).getAnimation().getCurrentFrame(UNIT_TIME));
+            if(activeSprites.get(i).getAnimation().hasRun()){
+                activeSprites.remove(i);
+            }
 
         }
 
@@ -475,8 +482,6 @@ public class TestObstaclesModel {
                     poolFlyingObstacles[poolFlyingObstaclesIndex].getAnimation().resetAnimation();
                 }
                 flyingObstacles.add(poolFlyingObstacles[poolFlyingObstaclesIndex]);
-                activeSprites.add(poolFlyingObstacles[poolFlyingObstaclesIndex]);
-
 
 
                 poolFlyingObstaclesIndex++;
