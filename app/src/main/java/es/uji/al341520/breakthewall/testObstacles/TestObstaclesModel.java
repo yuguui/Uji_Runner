@@ -291,6 +291,7 @@ public class TestObstaclesModel {
 
                 explosion.addAnimation(groundExplosion);
                 activeSprites.add(explosion);
+                
 
                 groundObstacles.remove(i);
 
