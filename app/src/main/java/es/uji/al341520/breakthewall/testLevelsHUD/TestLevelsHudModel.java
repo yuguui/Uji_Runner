@@ -14,8 +14,10 @@ import es.uji.al341520.breakthewall.model.TimedSprite;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_CROUCH_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_JUMP_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_RUN_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.FLYING_EXPLOSION_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.FLYING_OBSTACLE_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.GROUNDED_OBSTACLE_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.GROUND_EXPLOSION_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.characterRunning;
 import static es.uji.al341520.breakthewall.Assets.coin;
 
@@ -81,6 +83,9 @@ public class TestLevelsHudModel {
     Animation running;
     Animation crouching;
     Animation jumping;
+
+    Animation groundExplosion;
+    Animation flyingExplosion;
 
     Animation grounded;
     Animation flying;
@@ -201,12 +206,15 @@ public class TestLevelsHudModel {
         runnerHeights[RunnerState.JUMPING.ordinal()] = Assets.runnerJumpsHeight;
 
         running = new Animation(1, CHARACTER_RUN_NUMBER_OF_FRAMES,runnerWidths[0],runnerHeights[0],runnerWidths[0]*(CHARACTER_RUN_NUMBER_OF_FRAMES),5);
-        crouching = new Animation(1, CHARACTER_CROUCH_NUMBER_OF_FRAMES,runnerWidths[1],runnerHeights[1],runnerWidths[1]*CHARACTER_CROUCH_NUMBER_OF_FRAMES ,30);
-        jumping = new Animation(1, CHARACTER_JUMP_NUMBER_OF_FRAMES,runnerWidths[2],runnerHeights[2],runnerWidths[2]*CHARACTER_JUMP_NUMBER_OF_FRAMES ,30);
+        crouching = new Animation(1, CHARACTER_CROUCH_NUMBER_OF_FRAMES,runnerWidths[1],runnerHeights[1],runnerWidths[1]*CHARACTER_CROUCH_NUMBER_OF_FRAMES ,2);
+        jumping = new Animation(1, CHARACTER_JUMP_NUMBER_OF_FRAMES,runnerWidths[2],runnerHeights[2],runnerWidths[2]*CHARACTER_JUMP_NUMBER_OF_FRAMES ,6);
 
 
-        grounded = new Animation(1,GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,Assets.groundObstacle1Width,Assets.heightForGroundObstacles,Assets.groundObstacle1Width * GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,30);
-        flying =  new Animation(1,FLYING_OBSTACLE_NUMBER_OF_FRAMES,Assets.flyingObstacle1Width,Assets.heightForFlyingObstacles,Assets.flyingObstacle1Width * FLYING_OBSTACLE_NUMBER_OF_FRAMES,30);
+        grounded = new Animation(1,GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,Assets.groundObstacle1Width,Assets.heightForGroundObstacles,Assets.groundObstacle1Width * GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,10);
+        flying =  new Animation(1,FLYING_OBSTACLE_NUMBER_OF_FRAMES,Assets.flyingObstacle1Width,Assets.heightForFlyingObstacles,Assets.flyingObstacle1Width * FLYING_OBSTACLE_NUMBER_OF_FRAMES,10);
+
+        groundExplosion = new Animation(1,GROUND_EXPLOSION_NUMBER_OF_FRAMES,Assets.groundedExplosionWidth,Assets.heightForGroundObstacles,Assets.groundedExplosionWidth * GROUND_EXPLOSION_NUMBER_OF_FRAMES, 30);
+        flyingExplosion = new Animation(1,FLYING_EXPLOSION_NUMBER_OF_FRAMES,Assets.flyingExplosionWidth,Assets.heightForFlyingObstacles,Assets.flyingExplosionWidth * FLYING_EXPLOSION_NUMBER_OF_FRAMES, 30);
 
 
         runner.addAnimation(running);
@@ -321,6 +329,12 @@ public class TestLevelsHudModel {
         for(int i = 0; i < groundObstacles.size(); i++){
             if(runner.overlapBoundingBox(groundObstacles.get(i))){
 
+                Sprite explosion = new Sprite(Assets.groundedExplosion,false,groundObstacles.get(i).getX(),groundObstacles.get(i).getY(),0,0,groundObstacles.get(i).getSizeX(),groundObstacles.get(i).getSizeY());
+                groundExplosion.resetAnimation();
+                explosion.addAnimation(groundExplosion);
+                activeSprites.add(explosion);
+
+
                 Bitmap image = groundObstacles.get(i).getBitmapToRender();
                 if(image == Assets.groundObstacle1)
                 {
@@ -338,12 +352,17 @@ public class TestLevelsHudModel {
                 groundObstacles.get(i).setX(STAGE_WIDTH);
                 groundObstacles.get(i).setSpeedX(0);
                 groundObstacles.remove(i);
+
             }
         }
 
         for(int i = 0; i < flyingObstacles.size(); i++){
             if(runner.overlapBoundingBox(flyingObstacles.get(i))){
 
+                Sprite explosion = new Sprite(Assets.flyingExplosion,false,flyingObstacles.get(i).getX(),flyingObstacles.get(i).getY(),0,0,flyingObstacles.get(i).getSizeX(),flyingObstacles.get(i).getSizeY());
+                flyingExplosion.resetAnimation();
+                explosion.addAnimation(flyingExplosion);
+                activeSprites.add(explosion);
 
 
                 Bitmap image = flyingObstacles.get(i).getBitmapToRender();
@@ -356,9 +375,11 @@ public class TestLevelsHudModel {
                     currentLife -= AIR_MEDIUM_DAMAGE;
                 }
 
+
                 flyingObstacles.get(i).setX(STAGE_WIDTH);
                 flyingObstacles.get(i).setSpeedX(0);
                 flyingObstacles.remove(i);
+
             }
         }
 
@@ -398,6 +419,14 @@ public class TestLevelsHudModel {
                 flyingObstacles.get(i).setSpeedX(0);
                 flyingObstacles.remove(i);
             }
+        }
+        for (int i = 0; i < activeSprites.size();i++){
+
+            activeSprites.get(i).setFrame(activeSprites.get(i).getAnimation().getCurrentFrame(UNIT_TIME));
+            if(activeSprites.get(i).getAnimation().hasRun()){
+                activeSprites.remove(i);
+            }
+
         }
 
     }

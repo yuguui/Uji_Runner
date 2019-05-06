@@ -1,6 +1,7 @@
 package es.uji.al341520.breakthewall.UjiRunner;
 
 import android.graphics.Bitmap;
+import android.util.DebugUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -12,10 +13,14 @@ import es.uji.al341520.breakthewall.model.Sprite;
 import es.uji.al341520.breakthewall.model.TimedSprite;
 
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_CROUCH_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.CHARACTER_DIE_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_JUMP_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.CHARACTER_RUN_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.FLYING_EXPLOSION_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.FLYING_OBSTACLE_NUMBER_OF_FRAMES;
 import static es.uji.al341520.breakthewall.Assets.GROUNDED_OBSTACLE_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.GROUND_EXPLOSION_NUMBER_OF_FRAMES;
+import static es.uji.al341520.breakthewall.Assets.characterDying;
 import static es.uji.al341520.breakthewall.Assets.characterRunning;
 
 public class UjiRunnerModel {
@@ -81,6 +86,11 @@ public class UjiRunnerModel {
     Animation running;
     Animation crouching;
     Animation jumping;
+
+    Animation dying;
+
+    Animation groundExplosion;
+    Animation flyingExplosion;
 
     Animation grounded;
     Animation flying;
@@ -201,17 +211,23 @@ public class UjiRunnerModel {
         runnerHeights[RunnerState.JUMPING.ordinal()] = Assets.runnerJumpsHeight;
 
         running = new Animation(1, CHARACTER_RUN_NUMBER_OF_FRAMES,runnerWidths[0],runnerHeights[0],runnerWidths[0]*(CHARACTER_RUN_NUMBER_OF_FRAMES),5);
-        crouching = new Animation(1, CHARACTER_CROUCH_NUMBER_OF_FRAMES,runnerWidths[1],runnerHeights[1],runnerWidths[1]*CHARACTER_CROUCH_NUMBER_OF_FRAMES ,30);
-        jumping = new Animation(1, CHARACTER_JUMP_NUMBER_OF_FRAMES,runnerWidths[2],runnerHeights[2],runnerWidths[2]*CHARACTER_JUMP_NUMBER_OF_FRAMES ,30);
+        crouching = new Animation(1, CHARACTER_CROUCH_NUMBER_OF_FRAMES,runnerWidths[1],runnerHeights[1],runnerWidths[1]*CHARACTER_CROUCH_NUMBER_OF_FRAMES ,2);
+        jumping = new Animation(1, CHARACTER_JUMP_NUMBER_OF_FRAMES,runnerWidths[2],runnerHeights[2],runnerWidths[2]*CHARACTER_JUMP_NUMBER_OF_FRAMES ,6);
+
+        dying = new Animation(1, CHARACTER_DIE_NUMBER_OF_FRAMES,runnerWidths[0],runnerHeights[0],runnerWidths[0]*(CHARACTER_RUN_NUMBER_OF_FRAMES),6);
 
 
-        grounded = new Animation(1,GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,Assets.groundObstacle1Width,Assets.heightForGroundObstacles,Assets.groundObstacle1Width * GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,30);
-        flying =  new Animation(1,FLYING_OBSTACLE_NUMBER_OF_FRAMES,Assets.flyingObstacle1Width,Assets.heightForFlyingObstacles,Assets.flyingObstacle1Width * FLYING_OBSTACLE_NUMBER_OF_FRAMES,30);
+        grounded = new Animation(1,GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,Assets.groundObstacle1Width,Assets.heightForGroundObstacles,Assets.groundObstacle1Width * GROUNDED_OBSTACLE_NUMBER_OF_FRAMES,10);
+        flying =  new Animation(1,FLYING_OBSTACLE_NUMBER_OF_FRAMES,Assets.flyingObstacle1Width,Assets.heightForFlyingObstacles,Assets.flyingObstacle1Width * FLYING_OBSTACLE_NUMBER_OF_FRAMES,10);
+
+        groundExplosion = new Animation(1,GROUND_EXPLOSION_NUMBER_OF_FRAMES,Assets.groundedExplosionWidth,Assets.heightForGroundObstacles,Assets.groundedExplosionWidth * GROUND_EXPLOSION_NUMBER_OF_FRAMES, 30);
+        flyingExplosion = new Animation(1,FLYING_EXPLOSION_NUMBER_OF_FRAMES,Assets.flyingExplosionWidth,Assets.heightForFlyingObstacles,Assets.flyingExplosionWidth * FLYING_EXPLOSION_NUMBER_OF_FRAMES, 30);
 
 
         runner.addAnimation(running);
         runner.addAnimation(crouching);
         runner.addAnimation(jumping);
+        runner.addAnimation(dying);
 
         //OBSTACLES
 
@@ -274,6 +290,7 @@ public class UjiRunnerModel {
         coinsCollected = 0;
         currentLevel = Level.EASY;
         gameState = GameState.WAITING;
+        runner.setFrame(running.getCurrentFrame(0));
     }
 
 
@@ -286,6 +303,7 @@ public class UjiRunnerModel {
                 playGame(deltaTime);
                 break;
             case RUNNER_DIES:
+                runDeathAnimation(deltaTime);
                 break;
             case END_GAME:
                 break;
@@ -335,8 +353,15 @@ public class UjiRunnerModel {
             runner.setSpeedX(0);
         }
         runner.setFrame(runner.getAnimation(runnerState.ordinal()).getCurrentFrame(UNIT_TIME));
+
         for(int i = 0; i < groundObstacles.size(); i++){
             if(runner.overlapBoundingBox(groundObstacles.get(i))){
+
+                Sprite explosion = new Sprite(Assets.groundedExplosion,false,groundObstacles.get(i).getX(),groundObstacles.get(i).getY(),0,0,groundObstacles.get(i).getSizeX(),groundObstacles.get(i).getSizeY());
+                groundExplosion.resetAnimation();
+                explosion.addAnimation(groundExplosion);
+                activeSprites.add(explosion);
+
 
                 Bitmap image = groundObstacles.get(i).getBitmapToRender();
                 if(image == Assets.groundObstacle1)
@@ -352,10 +377,7 @@ public class UjiRunnerModel {
                     currentLife -= GROUND_HARD_DAMAGE;
                 }
 
-                if(currentLife <= 0)
-                {
-                    gameState = GameState.RUNNER_DIES;
-                }
+
                 groundObstacles.get(i).setX(STAGE_WIDTH);
                 groundObstacles.get(i).setSpeedX(0);
                 groundObstacles.remove(i);
@@ -365,7 +387,10 @@ public class UjiRunnerModel {
         for(int i = 0; i < flyingObstacles.size(); i++){
             if(runner.overlapBoundingBox(flyingObstacles.get(i))){
 
-
+                Sprite explosion = new Sprite(Assets.flyingExplosion,false,flyingObstacles.get(i).getX(),flyingObstacles.get(i).getY(),0,0,flyingObstacles.get(i).getSizeX(),flyingObstacles.get(i).getSizeY());
+                flyingExplosion.resetAnimation();
+                explosion.addAnimation(flyingExplosion);
+                activeSprites.add(explosion);
 
                 Bitmap image = flyingObstacles.get(i).getBitmapToRender();
                 if(image == Assets.flyingObstacle1)
@@ -396,7 +421,14 @@ public class UjiRunnerModel {
                 coinsCollected++;
             }
         }
+        if(currentLife <= 0)
+        {
+            gameState = GameState.RUNNER_DIES;
+            runner.setBitmapToRender(Assets.characterDying);
+            runner.getAnimation(3).resetAnimation();
+        }
         runner.move(UNIT_TIME);
+
 
     }
 
@@ -422,6 +454,14 @@ public class UjiRunnerModel {
                 flyingObstacles.get(i).setSpeedX(0);
                 flyingObstacles.remove(i);
             }
+        }
+        for (int i = 0; i < activeSprites.size();i++){
+
+            activeSprites.get(i).setFrame(activeSprites.get(i).getAnimation().getCurrentFrame(UNIT_TIME));
+            if(activeSprites.get(i).getAnimation().hasRun()){
+                activeSprites.remove(i);
+            }
+
         }
 
     }
@@ -618,6 +658,7 @@ public class UjiRunnerModel {
 
     }
 
+
     private void activateCoin()
     {
         double r;
@@ -726,6 +767,14 @@ public class UjiRunnerModel {
         poolFlyingObstaclesIndex= 0;
         poolCoinsIndex = 0;
 
+        groundObstacles.clear();
+        flyingObstacles.clear();
+        activeSprites.clear();
+        runner.setX(START_X);
+
+        runner.setBitmapToRender(Assets.characterRunning);
+
+
         currentLife = MAXLIFE;
         currentMeters = 0;
         coinsCollected = 0;
@@ -773,6 +822,15 @@ public class UjiRunnerModel {
         return gameState==GameState.END_GAME;
     }
 
+
+    private void runDeathAnimation(float deltaTime){
+        tickTime += deltaTime;
+        while (tickTime >= UNIT_TIME) {
+            tickTime -= UNIT_TIME;
+            Log.wtf("Death", "la animación esta siendo animada");
+            runner.setFrame(runner.getAnimation(3).getCurrentFrame(UNIT_TIME));
+        }
+    }
     enum GameState
     {
         WAITING,
@@ -782,5 +840,7 @@ public class UjiRunnerModel {
 
 
     }
+
+
 }
 

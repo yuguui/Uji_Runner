@@ -114,12 +114,7 @@ public class UjiRunnerController implements IGameController{
 
 
             RectF rect = new RectF(runner.getX(), runner.getY(), runner.getX() + runner.getSizeX(), runner.getY() + runner.getSizeY());
-            try {
-                //Log.e("ANIMACIONES", "El sprite es el de corriendo: " + (runner.getBitmapToRender() == Assets.characterRunning));
-                //Log.e("ANIMACIONES", "Las esquinas arriba y abajo son: " + runner.getFrame().top + ", " + runner.getFrame().bottom + " las esquinas laterales son: " + runner.getFrame().right + ", " + runner.getFrame().left);
-            } catch (Exception e) {
 
-            }
             for (int i = 0; i < model.getGroundObstacles().size(); i++) {
                 Sprite obstacle = model.getGroundObstacles().get(i);
                 if (obstacle.isAnimated()) {
@@ -141,10 +136,16 @@ public class UjiRunnerController implements IGameController{
                     graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(), model.getFlyingObstacles().get(i).getX(), model.getFlyingObstacles().get(i).getY(), false);
                 }
             }
+            for (int i = 0; i < model.getActiveSprites().size();i++){
+                Sprite obstacle = model.getActiveSprites().get(i);
+                RectF rectObstacle = new RectF(obstacle.getX(),obstacle.getY(),obstacle.getX()+obstacle.getSizeX(),obstacle.getY()+obstacle.getSizeY());
+                graphics.drawAnimatedBitmap(obstacle.getBitmapToRender(),obstacle.getFrame(),rectObstacle,false);
+            }
 
             for (int i = 0; i < model.getCoins().size(); i++) {
                 graphics.drawBitmap(model.getCoins().get(i).getBitmapToRender(), model.getCoins().get(i).getX(), model.getCoins().get(i).getY(), false);
             }
+
 
             graphics.drawAnimatedBitmap(runner.getBitmapToRender(), runner.getFrame(), rect, false);
         }
@@ -154,8 +155,14 @@ public class UjiRunnerController implements IGameController{
         }
         if(model.isDying())
         {
-            //HACER LO DE LA ANIMACION\\
-            model.setGameOver();
+            Sprite runner = model.getRunner();
+            RectF rect = new RectF(runner.getX(), runner.getY(), runner.getX() + runner.getSizeX(), runner.getY() + runner.getSizeY());
+            graphics.drawAnimatedBitmap(runner.getBitmapToRender(), runner.getFrame(), rect, false);
+
+            if(runner.getAnimation(3).hasRun()){
+                Log.d("DEATH","GAME OVER");
+                model.setGameOver();
+            }
         }
         return (graphics.getFrameBuffer());
 

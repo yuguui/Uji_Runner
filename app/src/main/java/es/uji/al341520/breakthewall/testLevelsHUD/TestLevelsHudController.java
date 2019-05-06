@@ -117,6 +117,11 @@ public class TestLevelsHudController implements IGameController{
                 graphics.drawBitmap(model.getFlyingObstacles().get(i).getBitmapToRender(), model.getFlyingObstacles().get(i).getX(), model.getFlyingObstacles().get(i).getY(), false);
             }
         }
+        for (int i = 0; i < model.getActiveSprites().size();i++){
+            Sprite obstacle = model.getActiveSprites().get(i);
+            RectF rectObstacle = new RectF(obstacle.getX(),obstacle.getY(),obstacle.getX()+obstacle.getSizeX(),obstacle.getY()+obstacle.getSizeY());
+            graphics.drawAnimatedBitmap(obstacle.getBitmapToRender(),obstacle.getFrame(),rectObstacle,false);
+        }
 
         for (int i= 0; i< model.getCoins().size(); i++)
         {
