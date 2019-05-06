@@ -45,14 +45,14 @@ public class Assets {
     public static int GAME_OVER_HEIGHT = 200;
     public static int GAME_OVER_WIDTH = 300;
 
-    public static final int CHARACTER_RUN_FRAME_WIDTH = 120;
-    public static final int CHARACTER_RUN_FRAME_HEIGHT = 150;
+    public static final int CHARACTER_RUN_FRAME_WIDTH = 70;
+    public static final int CHARACTER_RUN_FRAME_HEIGHT = 90;
 
-    public static final int CHARACTER_JUMP_FRAME_WIDTH = 72;
-    public static final int CHARACTER_JUMP_FRAME_HEIGHT = 150;
+    public static final int CHARACTER_JUMP_FRAME_WIDTH = 70;
+    public static final int CHARACTER_JUMP_FRAME_HEIGHT = 90;
 
-    public static final int CHARACTER_CROUCH_FRAME_WIDTH = 70;
-    public static final int CHARACTER_CROUCH_FRAME_HEIGHT = 105;
+    public static final int CHARACTER_CROUCH_FRAME_WIDTH = 50;
+    public static final int CHARACTER_CROUCH_FRAME_HEIGHT = 70;
 
     private static final int FACE_FRAME_HEIGHT = 120;
     private static final int FACE_FRAME_WIDTH = 120;
@@ -71,8 +71,8 @@ public class Assets {
     public static final int GROUNDED_OBSTACLE_NUMBER_OF_FRAMES  = 8;
     public static final int FLYING_OBSTACLE_NUMBER_OF_FRAMES  = 5;
 
-    public static final int GROUND_EXPLOSION_NUMBER_OF_FRAMES  = 15;
-    public static final int FLYING_EXPLOSION_NUMBER_OF_FRAMES  = 15;
+    public static final int GROUND_EXPLOSION_NUMBER_OF_FRAMES  = 6;
+    public static final int FLYING_EXPLOSION_NUMBER_OF_FRAMES  = 6;
 
 
 
@@ -185,8 +185,8 @@ public class Assets {
                 resources, R.drawable.bichosuelo4), groundObstacle4Width,
                 heightForGroundObstacles, true);
 
-        coinWidth = groundObstacle2.getWidth();
-        coin = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.brick0), coinWidth, heightForGroundObstacles, true);
+        coinWidth = heightForGroundObstacles;
+        coin = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.coin), coinWidth, heightForGroundObstacles, true);
 
         gameOverImage = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,R.drawable.boton), GAME_OVER_WIDTH, GAME_OVER_HEIGHT, true);
 
@@ -206,12 +206,12 @@ public class Assets {
         flyingExplosionWidth = (heightForFlyingObstacles * FACE_FRAME_WIDTH) / FACE_FRAME_HEIGHT;
 
         flyingExplosion = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
-                R.drawable.ball), flyingExplosionWidth * FLYING_EXPLOSION_NUMBER_OF_FRAMES, heightForFlyingObstacles, true);
+                R.drawable.explosion), flyingExplosionWidth * FLYING_EXPLOSION_NUMBER_OF_FRAMES, heightForFlyingObstacles, true);
 
         groundedExplosionWidth = (heightForGroundObstacles * FACE_FRAME_WIDTH) / FACE_FRAME_HEIGHT;
 
         groundedExplosion = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,
-                R.drawable.paddle), groundedExplosionWidth*GROUND_EXPLOSION_NUMBER_OF_FRAMES, heightForGroundObstacles, true);
+                R.drawable.explosion), groundedExplosionWidth*GROUND_EXPLOSION_NUMBER_OF_FRAMES, heightForGroundObstacles, true);
 
 
 
