@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="es.uji.al341520.InfinityRunner">
+    package="es.uji.al341520.breakthewall">
 
     <application
         android:allowBackup="true"
@@ -10,19 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-    <activity android:name="es.uji.al341520.InfinityRunner.MainActivity">
+    <activity android:name="es.uji.al341520.breakthewall.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="es.uji.al341520.InfinityRunner.testFramework.TestFramework"/>
-        <activity android:name="es.uji.al341520.InfinityRunner.testParallax.TestParallax"/>
-        <activity android:name="es.uji.al341520.InfinityRunner.testCharacter.TestCharacter"/>
-        <activity android:name="es.uji.al341520.InfinityRunner.testObstacles.TestObstacles"/>
-        <activity android:name="es.uji.al341520.InfinityRunner.testLevelsHUD.TestLevelsHud"/>
-        <activity android:name="es.uji.al341520.InfinityRunner.InfinityRunner.InfinityRunner"/>
+        <activity android:name="es.uji.al341520.breakthewall.testFramework.TestFramework"/>
+        <activity android:name="es.uji.al341520.breakthewall.testParallax.TestParallax"/>
+        <activity android:name="es.uji.al341520.breakthewall.testCharacter.TestCharacter"/>
+        <activity android:name="es.uji.al341520.breakthewall.testObstacles.TestObstacles"/>
+        <activity android:name="es.uji.al341520.breakthewall.testLevelsHUD.TestLevelsHud"/>
+        <activity android:name="es.uji.al341520.breakthewall.InfinityRunner.InfinityRunner"/>
 
 
 
